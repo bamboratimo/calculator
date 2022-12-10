@@ -54,6 +54,11 @@ body {
     border-radius: 50%;
     color: #fff;
     font-size: 2rem;
+    cursor: pointer;
+}
+
+.digit:hover {
+    color: #000;
 }
 
 .divide-btn, .multiply-btn, .subtract-btn, .add-btn, .equals-btn {

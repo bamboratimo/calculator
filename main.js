@@ -31,3 +31,26 @@ function operate(operator, num1, num2) {
         }
 }
 console.log(operate("*", 5, 2));
+
+let displayVal = "0";
+let display = document.querySelector(".display");
+display.textContent = displayVal;
+
+let buttons = document.querySelector("buttons");
+
+let digits = document.querySelectorAll(".digit");
+let numbers = document.querySelectorAll(".num");
+
+numbers.forEach(num => {
+    num.addEventListener("click", addToDisplay)
+});
+
+function addToDisplay (e) {
+    if (displayVal === "0") {
+        displayVal = "";
+    }
+    displayVal += e.target.textContent;
+    display.textContent = displayVal
+}
+
+
