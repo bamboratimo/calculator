@@ -30,9 +30,12 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
-console.log(operate("*", 5, 2));
 
-let displayVal = "0";
+let firstNum = "";
+let operator = "";
+let secondNum = 0;
+let result;
+let displayVal = 0;
 let display = document.querySelector(".display");
 display.textContent = displayVal;
 
@@ -46,11 +49,51 @@ numbers.forEach(num => {
 });
 
 function addToDisplay (e) {
-    if (displayVal === "0") {
-        displayVal = "";
+    if (displayVal === 0) {
+        //displayVal = "";
     }
-    displayVal += e.target.textContent;
-    display.textContent = displayVal
+    if(operator != "") {
+        secondNum = secondNum + e.target.textContent;
+        secondNum = +secondNum;
+        console.log(secondNum);
+        console.log(operator);
+        display.textContent = secondNum;
+    } else {
+        displayVal += e.target.textContent;
+        displayVal = +displayVal;
+        console.log(typeof displayVal);
+        display.textContent = displayVal
+    }
 }
 
 
+const operators = document.querySelectorAll(".operator");
+operators.forEach(opera => {
+    opera.addEventListener("click", (e) => {
+        firstNum = displayVal;
+        operator = e.target.textContent.toString();
+        console.log(operator);
+    });
+});
+
+const equals = document.querySelector(".equals-btn");
+equals.addEventListener("click", (e) => {
+    console.log(firstNum);
+    console.log(secondNum);
+    result = operate(operator, firstNum, secondNum);
+    console.log(typeof firstNum);
+    console.log(typeof secondNum);
+    console.log(result);
+    display.textContent = result;
+});
+
+//Function to clear the display
+const clear = document.querySelector(".clear-btn");
+clear.addEventListener("click", (e) => {
+    displayVal = 0;
+    display.textContent = displayVal;
+    firstNum = 0;
+    operator = 0;
+    secondNum = 0;
+    result = 0;
+});
