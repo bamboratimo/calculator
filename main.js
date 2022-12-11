@@ -31,9 +31,11 @@ function operate(operator, num1, num2) {
         }
 }
 
+let listenerActive;
+
 let firstNum = "";
 let operator = "";
-let secondNum = 0;
+let secondNum = "";
 let result;
 let displayVal = 0;
 let display = document.querySelector(".display");
@@ -45,14 +47,19 @@ let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
 
 numbers.forEach(num => {
-    num.addEventListener("click", addToDisplay)
+    num.addEventListener("click", addToDisplay);
+    listenerActive = true;
 });
 
 function addToDisplay (e) {
-    if (displayVal === 0) {
-        //displayVal = "";
+    if (displayVal.toString().length > 7 || secondNum.toString().length > 9) {
+        numbers.forEach(num => {
+            num.removeEventListener("click", addToDisplay)
+            listenerActive = false;
+        });
     }
-    if(operator != "") {
+
+    if (operator != "") {
         secondNum = secondNum + e.target.textContent;
         secondNum = +secondNum;
         console.log(secondNum);
@@ -62,17 +69,22 @@ function addToDisplay (e) {
         displayVal += e.target.textContent;
         displayVal = +displayVal;
         console.log(typeof displayVal);
-        display.textContent = displayVal
+        display.textContent = displayVal;
     }
+
 }
 
 
 const operators = document.querySelectorAll(".operator");
-operators.forEach(opera => {
-    opera.addEventListener("click", (e) => {
+operators.forEach(oper => {
+    oper.addEventListener("click", (e) => {
         firstNum = displayVal;
+        displayVal = 0;
+        console.log(displayVal);
         operator = e.target.textContent.toString();
-        console.log(operator);
+        numbers.forEach(num => {
+            num.addEventListener("click", addToDisplay)
+        });
     });
 });
 
@@ -96,4 +108,10 @@ clear.addEventListener("click", (e) => {
     operator = 0;
     secondNum = 0;
     result = 0;
+    if (listenerActive == false) {
+        numbers.forEach(num => {
+            num.addEventListener("click", addToDisplay);
+            listenerActive = true;
+        });
+    }
 });
