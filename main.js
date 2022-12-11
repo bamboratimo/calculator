@@ -49,9 +49,18 @@ let numbers = document.querySelectorAll(".num");
 numbers.forEach(num => {
     num.addEventListener("click", addToDisplay);
     listenerActive = true;
+    num.addEventListener("mousedown", (e) => {
+        e.target.style.opacity = "0.3";
+    });
+    num.addEventListener("mouseup", (e) => {
+        e.target.style.opacity = "1";
+    });
 });
 
 function addToDisplay (e) {
+    operators.forEach(operat => {
+        operat.style.opacity = "1";            
+    });
     if (displayVal.toString().length > 7 || secondNum.toString().length > 9) {
         numbers.forEach(num => {
             num.removeEventListener("click", addToDisplay)
@@ -78,6 +87,11 @@ function addToDisplay (e) {
 const operators = document.querySelectorAll(".operator");
 operators.forEach(oper => {
     oper.addEventListener("click", (e) => {
+        operators.forEach(operat => {
+            if (operat.style.opacity == "0.3") {
+                operat.style.opacity = "1";            }
+        });
+        e.target.style.opacity = "0.3";
         firstNum = displayVal;
         displayVal = 0;
         console.log(displayVal);
@@ -90,6 +104,9 @@ operators.forEach(oper => {
 
 const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", (e) => {
+    operators.forEach(operat => {
+            operat.style.opacity = "1";            
+        });
     console.log(firstNum);
     console.log(secondNum);
     result = operate(operator, firstNum, secondNum);
@@ -108,6 +125,9 @@ clear.addEventListener("click", (e) => {
     operator = 0;
     secondNum = 0;
     result = 0;
+    operators.forEach(operat => {
+        operat.style.opacity = "1";            
+    });
     if (listenerActive == false) {
         numbers.forEach(num => {
             num.addEventListener("click", addToDisplay);
