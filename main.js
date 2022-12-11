@@ -74,7 +74,14 @@ function addToDisplay (e) {
         });
     }
 
-    if (operator != undefined) {
+    if (result) {
+        console.log(operatorActive);
+        displayVal += e.target.textContent;
+        displayVal = +displayVal;
+        secondNum = displayVal;
+        console.log(secondNum);
+        display.textContent = secondNum;
+    } else if (operator != undefined) {
         secondNum = secondNum + e.target.textContent;
         secondNum = +secondNum;
         console.log(secondNum);
@@ -83,6 +90,7 @@ function addToDisplay (e) {
     } else {
         displayVal += e.target.textContent;
         firstNum = +displayVal;
+        console.log(firstNum);
         arr.push(firstNum);
         display.textContent = firstNum;
     }
@@ -106,7 +114,6 @@ operators.forEach(oper => {
         e.target.style.opacity = "0.3";
         //firstNum = displayVal;
         displayVal = 0;
-        console.log(displayVal);
         operator = e.target.textContent.toString();
         numbers.forEach(num => {
             num.addEventListener("click", addToDisplay)
@@ -122,10 +129,11 @@ equals.addEventListener("click", (e) => {
     console.log(firstNum);
     console.log(secondNum);
     result = operate(operator, firstNum, secondNum);
-    console.log(typeof firstNum);
-    console.log(typeof secondNum);
     console.log(result);
     display.textContent = result;
+    displayVal = 0;
+    firstNum = result;
+    operatorActive = false;
 });
 
 //Function to clear the display
