@@ -30,11 +30,14 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
-let arr = [];
 let listenerActive;
 let operatorActive;
+let minus;
+let firstNumMinus = "-";
+// variable for displaying minus sign if first digit is minus after pressing operator
+let showMinusInDisp;
 
-let firstNum = 0;
+let firstNum = "";
 let operator;
 let secondNum = 0;
 let result;
@@ -66,8 +69,14 @@ function addToDisplay (e) {
         operat.style.opacity = "1";            
     });
 
-
-    if (result) {
+    if (minus == true) {
+        firstNumMinus += e.target.textContent;
+        display.textContent = firstNumMinus.substring(1);
+        firstNum = +firstNumMinus;
+        console.log(firstNumMinus);
+        showMinusInDisp = true;
+        //display.textContent = firstNum;
+    }else if (result) {
         console.log(operatorActive);
         displayVal += e.target.textContent;
         displayVal = +displayVal;
@@ -84,7 +93,6 @@ function addToDisplay (e) {
         displayVal += e.target.textContent;
         firstNum = +displayVal;
         console.log(firstNum);
-        arr.push(firstNum);
         display.textContent = firstNum;
     }
     // check if displaytext is too long
@@ -94,13 +102,21 @@ function addToDisplay (e) {
             listenerActive = false;
         });
     }
-
 }
-
 
 const operators = document.querySelectorAll(".operator");
 operators.forEach(oper => {
     oper.addEventListener("click", (e) => {
+        if (showMinusInDisp == true) {
+            display.textContent = firstNumMinus;
+            juu = false;
+        }
+        if (e.target.textContent == "-" && firstNum == "") {
+            e.target.style.opacity = 0.3;
+            minus = true;
+            console.log("raiia");
+            return;
+        }
         operators.forEach(operat => {
             if (operat.style.opacity == "0.3") {
                 operat.style.opacity = "1";
@@ -110,13 +126,13 @@ operators.forEach(oper => {
                 display.textContent = result;
             }
         });
+        minus = false;
         operatorActive = true;
         e.target.style.opacity = "0.3";
-        //firstNum = displayVal;
         displayVal = 0;
         operator = e.target.textContent.toString();
         numbers.forEach(num => {
-            num.addEventListener("click", addToDisplay)
+            num.addEventListener("click", addToDisplay);
         });
     });
 });
