@@ -66,13 +66,6 @@ function addToDisplay (e) {
         operat.style.opacity = "1";            
     });
 
-    // check if number is too long
-    if (displayVal.toString().length > 7 || secondNum.toString().length > 7) {
-        numbers.forEach(num => {
-            num.removeEventListener("click", addToDisplay)
-            listenerActive = false;
-        });
-    }
 
     if (result) {
         console.log(operatorActive);
@@ -93,6 +86,13 @@ function addToDisplay (e) {
         console.log(firstNum);
         arr.push(firstNum);
         display.textContent = firstNum;
+    }
+    // check if displaytext is too long
+    if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
+        numbers.forEach(num => {
+            num.removeEventListener("click", addToDisplay)
+            listenerActive = false;
+        });
     }
 
 }
