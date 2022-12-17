@@ -40,7 +40,7 @@ let showMinusInDisp;
 let firstNum = "";
 let operator;
 let secondNum = 0;
-let result;
+let result = 0;
 let displayVal = 0;
 let display = document.querySelector(".display");
 display.textContent = displayVal;
@@ -49,6 +49,8 @@ let buttons = document.querySelector("buttons");
 
 let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
+const operators = document.querySelectorAll(".operator");
+
 
 numbers.forEach(num => {
     num.addEventListener("click", addToDisplay);
@@ -75,8 +77,7 @@ function addToDisplay (e) {
         firstNum = +firstNumMinus;
         console.log(firstNumMinus);
         showMinusInDisp = true;
-        //display.textContent = firstNum;
-    }else if (result) {
+    } else if (result) {
         console.log(operatorActive);
         displayVal += e.target.textContent;
         displayVal = +displayVal;
@@ -90,8 +91,10 @@ function addToDisplay (e) {
         console.log(operator);
         display.textContent = secondNum;
     } else {
-        displayVal += e.target.textContent;
-        firstNum = +displayVal;
+        firstNum += e.target.textContent;
+        firstNum = +firstNum;
+        //displayVal += e.target.textContent;
+        //firstNum = +displayVal;
         console.log(firstNum);
         display.textContent = firstNum;
     }
@@ -104,13 +107,18 @@ function addToDisplay (e) {
     }
 }
 
-const operators = document.querySelectorAll(".operator");
-operators.forEach(oper => {
-    oper.addEventListener("click", (e) => {
+        operators.forEach(oper => {
+            oper.addEventListener("click", clickOperator);
+        });
+
+        function clickOperator (e) {
+            if (e.target.textContent != "-" && firstNum == "") {
+                return;
+            }
         if (showMinusInDisp == true) {
             display.textContent = firstNumMinus;
-            juu = false;
         }
+
         if (e.target.textContent == "-" && firstNum == "") {
             e.target.style.opacity = 0.3;
             minus = true;
@@ -134,8 +142,8 @@ operators.forEach(oper => {
         numbers.forEach(num => {
             num.addEventListener("click", addToDisplay);
         });
-    });
-});
+    }
+
 
 const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", (e) => {
