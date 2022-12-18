@@ -37,9 +37,10 @@ let firstNumMinus = "-";
 // variable for displaying minus sign if first digit is minus after pressing operator
 let showMinusInDisp;
 let equalClicked;
+let moi = false;
 
 let firstNum = "";
-let operator;
+let operator = "";
 let secondNum = 0;
 let result = 0;
 let displayVal = 0;
@@ -52,12 +53,13 @@ let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
 const operators = document.querySelectorAll(".operator");
 
-
+// activate eventListener for numbers
 numbers.forEach(num => {
     num.addEventListener("click", addToDisplay);
     listenerActive = true;
 
-    // make number color change when pressing down
+
+    // make a number color change when pressing down
     num.addEventListener("mousedown", (e) => {
         e.target.style.opacity = "0.3";
     });
@@ -77,28 +79,36 @@ function addToDisplay (e) {
         firstNum = +firstNumMinus;
         console.log(firstNumMinus);
         showMinusInDisp = true;
+    } else if (result != 0 && equalClicked == true) {
+        displayVal = displayVal + e.target.textContent;
+        firstNum = +displayVal;
+        console.log(firstNum);
+        display.textContent = firstNum;
+        moi = true;
+        console.log(firstNum);
     } else if (result) {
-        console.log(operatorActive);
         displayVal += e.target.textContent;
         displayVal = +displayVal;
         secondNum = displayVal;
-        console.log(secondNum);
         display.textContent = secondNum;
-        //
+        displayVal = 0;
         firstNum = result;
-    } else if (operator != undefined) {
-        secondNum = secondNum + e.target.textContent;
-        secondNum = +secondNum;
-        console.log(secondNum);
-        console.log(operator);
+    } else if (operator != "") {
+        displayVal += e.target.textContent;
+        displayVal = +displayVal;
+        secondNum = displayVal;
+        //secondNum = secondNum + e.target.textContent;
+        //secondNum = +secondNum;
         display.textContent = secondNum;
+        displayVal = 0;
     } else {
-        firstNum += e.target.textContent;
-        firstNum = +firstNum;
-        //displayVal += e.target.textContent;
-        //firstNum = +displayVal;
+        //firstNum += e.target.textContent;
+        //firstNum = +firstNum;
+        displayVal += e.target.textContent;
+        firstNum = +displayVal;
         console.log(firstNum);
         display.textContent = firstNum;
+        displayVal = 0;
     }
     // check if displaytext is too long
     if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
@@ -114,6 +124,7 @@ function addToDisplay (e) {
         });
 
         function clickOperator (e) {
+            equalClicked = false;
             if (e.target.textContent != "-" && firstNum == "") {
                 return;
             }
@@ -130,6 +141,14 @@ function addToDisplay (e) {
         operators.forEach(operat => {
             if (operat.style.opacity == "0.3") {
                 operat.style.opacity = "1";
+            }
+            if (moi == true) {
+                secondNum = 0;
+                displayVal = 0;
+                operator = " ";
+                console.log(firstNum, secondNum);
+                equalClicked = false;
+                result = false;
             }
             if (operatorActive == true) {
                 result = operate(operator, firstNum, secondNum);
@@ -157,9 +176,9 @@ equals.addEventListener("click", (e) => {
     result = operate(operator, firstNum, secondNum);
     console.log(result);
     display.textContent = result;
-    displayVal = 0;
     firstNum = result;
     operatorActive = false;
+    equalClicked = true;
 });
 
 //Function to clear the display
