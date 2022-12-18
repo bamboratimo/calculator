@@ -36,6 +36,7 @@ let minus;
 let firstNumMinus = "-";
 // variable for displaying minus sign if first digit is minus after pressing operator
 let showMinusInDisp;
+let equalClicked;
 
 let firstNum = "";
 let operator;
@@ -70,8 +71,7 @@ function addToDisplay (e) {
     operators.forEach(operat => {
         operat.style.opacity = "1";            
     });
-
-    if (minus == true) {
+     if (minus == true) {
         firstNumMinus += e.target.textContent;
         display.textContent = firstNumMinus.substring(1);
         firstNum = +firstNumMinus;
@@ -84,6 +84,8 @@ function addToDisplay (e) {
         secondNum = displayVal;
         console.log(secondNum);
         display.textContent = secondNum;
+        //
+        firstNum = result;
     } else if (operator != undefined) {
         secondNum = secondNum + e.target.textContent;
         secondNum = +secondNum;
