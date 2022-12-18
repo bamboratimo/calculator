@@ -30,13 +30,13 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
-let listenerActive;
-let operatorActive;
-let minus;
+let listenerActive = false;
+let operatorActive = false;
+let minus = false;
 let firstNumMinus = "-";
 // variable for displaying minus sign if first digit is minus after pressing operator
-let showMinusInDisp;
-let equalClicked;
+let showMinusInDisp = false;
+let equalClicked = false;
 let moi = false;
 
 let firstNum = "";
@@ -79,6 +79,7 @@ function addToDisplay (e) {
         firstNum = +firstNumMinus;
         console.log(firstNumMinus);
         showMinusInDisp = true;
+        minus = false;
     } else if (result != 0 && equalClicked == true) {
         displayVal = displayVal + e.target.textContent;
         firstNum = +displayVal;
@@ -88,24 +89,19 @@ function addToDisplay (e) {
         console.log(firstNum);
     } else if (result) {
         displayVal += e.target.textContent;
+        console.log("moi");
         displayVal = +displayVal;
         secondNum = displayVal;
         display.textContent = secondNum;
-        displayVal = 0;
         firstNum = result;
     } else if (operator != "") {
-        displayVal += e.target.textContent;
-        displayVal = +displayVal;
-        secondNum = displayVal;
-        //secondNum = secondNum + e.target.textContent;
-        //secondNum = +secondNum;
+        secondNum = secondNum + e.target.textContent;
+        secondNum = +secondNum;
         display.textContent = secondNum;
         displayVal = 0;
     } else {
-        //firstNum += e.target.textContent;
-        //firstNum = +firstNum;
-        displayVal += e.target.textContent;
-        firstNum = +displayVal;
+        firstNum += e.target.textContent;
+        firstNum = +firstNum;
         console.log(firstNum);
         display.textContent = firstNum;
         displayVal = 0;
@@ -130,6 +126,7 @@ function addToDisplay (e) {
             }
         if (showMinusInDisp == true) {
             display.textContent = firstNumMinus;
+            showMinusInDisp = false;
         }
 
         if (e.target.textContent == "-" && firstNum == "") {
@@ -149,9 +146,14 @@ function addToDisplay (e) {
                 console.log(firstNum, secondNum);
                 equalClicked = false;
                 result = false;
+                moi = false;
             }
+
             if (operatorActive == true) {
                 result = operate(operator, firstNum, secondNum);
+                console.log(result);
+                result = result.toString().substring(0, 9);
+                result = +result;
                 display.textContent = result;
             }
         });
@@ -175,22 +177,32 @@ equals.addEventListener("click", (e) => {
     console.log(secondNum);
     result = operate(operator, firstNum, secondNum);
     console.log(result);
+    result = result.toString().substring(0, 9);
+    result = +result;
     display.textContent = result;
     firstNum = result;
     operatorActive = false;
     equalClicked = true;
+    displayVal = 0;
 });
 
 //Function to clear the display
 const clear = document.querySelector(".clear-btn");
 clear.addEventListener("click", (e) => {
+    display.textContent = 0;
+    listenerActive = false;
     operatorActive = false;
-    displayVal = 0;
-    display.textContent = displayVal;
-    firstNum = 0;
-    operator = undefined;
+    minus = false;
+    firstNumMinus = "-";
+    showMinusInDisp = false;
+    equalClicked = false;
+    moi = false;
+
+    firstNum = "";
+    operator = "";
     secondNum = 0;
     result = 0;
+    displayVal = 0;
     operators.forEach(operat => {
         operat.style.opacity = "1";            
     });
