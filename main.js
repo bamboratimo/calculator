@@ -147,7 +147,7 @@ function addToDisplay (e) {
                 operator = "";
                 console.log(firstNum, secondNum);
                 equalClicked = false;
-                result = false;
+                result = "";
                 moi = false;
             }
 
@@ -175,16 +175,10 @@ function addToDisplay (e) {
                     secondNum = "";
                     result = "";
                     displayVal = "";
+                    return;
                 }
-                console.log(firstNum);
-                console.log(secondNum);
-                console.log(result);
-                //result = result.toString().substring(0, 9);
-                //result = +result;
-                //display.textContent = result;
             }
 
-        //});
         resultX2 = true;
         minus = false;
         operatorActive = true;
@@ -198,7 +192,9 @@ function addToDisplay (e) {
 
 
 const equals = document.querySelector(".equals-btn");
-equals.addEventListener("click", (e) => {
+equals.addEventListener("click", clickEquals);
+
+    function clickEquals(e) {
     operators.forEach(operat => {
             operat.style.opacity = "1";            
         });
@@ -221,7 +217,7 @@ equals.addEventListener("click", (e) => {
         firstNum = result;
         operatorActive = false;
         equalClicked = true;
-        displayVal = 0;
+        displayVal = "";
         resultX2 = false;
     } else {
         display.textContent = "Error";
@@ -239,20 +235,14 @@ equals.addEventListener("click", (e) => {
         result = "";
         displayVal = "";
     }
-    console.log(result);
-    /*result = result.toString().substring(0, 9);
-    result = +result;
-    display.textContent = result;
-    firstNum = result;
-    operatorActive = false;
-    equalClicked = true;
-    displayVal = 0;
-    resultX2 = false;*/
-});
+}
+
+
+const clear = document.querySelector(".clear-btn");
+clear.addEventListener("click", clearScreen);
 
 //Function to clear the display
-const clear = document.querySelector(".clear-btn");
-clear.addEventListener("click", (e) => {
+    function clearScreen(e) {
     display.textContent = 0;
     listenerActive = false;
     operatorActive = false;
@@ -264,9 +254,9 @@ clear.addEventListener("click", (e) => {
 
     firstNum = "";
     operator = "";
-    secondNum = 0;
-    result = 0;
-    displayVal = 0;
+    secondNum = "";
+    result = "";
+    displayVal = "";
     operators.forEach(operat => {
         operat.style.opacity = "1";            
     });
@@ -276,4 +266,4 @@ clear.addEventListener("click", (e) => {
             listenerActive = true;
         });
     }
-});
+};
