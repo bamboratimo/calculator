@@ -30,17 +30,15 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
-// check if equals is clicked after operator, so the result is result + operator + result
-let resultX2 = false;
+let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 
-let listenerActive = false;
-let operatorActive = false;
-let minus = false;
-let firstNumMinus = "-";
-// variable for displaying minus sign if first digit is minus after pressing operator
-let showMinusInDisp = false;
-let equalClicked = false;
-let moi = false;
+let listenerActive = false; //a variable to disable eventlistener on numbers
+let operatorActive = false; // check if operator button is clicked
+let minus = false; //check if minus is clicked as a first number
+let firstNumMinus = "-"; //add a minus sign in front of a first number if minus is active
+let showMinusInDisp = false; //a variable for displaying minus sign if first digit is minus after pressing operator
+let equalClicked = false; //check if equals button is clicked
+let startOver = false; //a variable to determine if a whole new calculation should start after clicking equals button
 
 let firstNum = "";
 let operator = "";
@@ -87,7 +85,7 @@ function addToDisplay (e) {
         displayVal = displayVal + e.target.textContent;
         firstNum = +displayVal;
         display.textContent = firstNum;
-        moi = true;
+        startOver = true;
     } else if (result !== "") {
         displayVal += e.target.textContent;
         console.log("moi");
@@ -95,7 +93,8 @@ function addToDisplay (e) {
         secondNum = displayVal;
         display.textContent = secondNum;
         firstNum = result;
-    } else if (operator != "") {
+    } else if (operator !== "") {
+        console.log("hei");
         secondNum = secondNum + e.target.textContent;
         secondNum = +secondNum;
         display.textContent = secondNum;
@@ -107,6 +106,7 @@ function addToDisplay (e) {
         displayVal = "";
     }
     resultX2 = false;
+
     // check if displaytext is too long
     if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
         numbers.forEach(num => {
@@ -141,14 +141,14 @@ function addToDisplay (e) {
                 operat.style.opacity = "1";
             }
         });
-            if (moi == true) {
+            if (startOver == true) {
                 secondNum = "";
                 displayVal = "";
                 operator = "";
                 console.log(firstNum, secondNum);
                 equalClicked = false;
                 result = "";
-                moi = false;
+                startOver = false;
             }
 
             if (operatorActive == true && secondNum !== "") {
@@ -168,7 +168,7 @@ function addToDisplay (e) {
                     firstNumMinus = "-";
                     showMinusInDisp = false;
                     equalClicked = false;
-                    moi = false;
+                    startOver = false;
 
                     firstNum = "";
                     operator = "";
@@ -227,7 +227,7 @@ equals.addEventListener("click", clickEquals);
         firstNumMinus = "-";
         showMinusInDisp = false;
         equalClicked = false;
-        moi = false;
+        startOver = false;
 
         firstNum = "";
         operator = "";
@@ -250,7 +250,7 @@ clear.addEventListener("click", clearScreen);
     firstNumMinus = "-";
     showMinusInDisp = false;
     equalClicked = false;
-    moi = false;
+    startOver = false;
 
     firstNum = "";
     operator = "";
