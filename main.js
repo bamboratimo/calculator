@@ -44,11 +44,11 @@ let moi = false;
 
 let firstNum = "";
 let operator = "";
-let secondNum = 0;
+let secondNum = "";
 let result = "";
-let displayVal = 0;
+let displayVal = "";
 let display = document.querySelector(".display");
-display.textContent = displayVal;
+display.textContent = 0;
 
 let buttons = document.querySelector("buttons");
 
@@ -86,11 +86,9 @@ function addToDisplay (e) {
     } else if (result != "" && equalClicked == true) {
         displayVal = displayVal + e.target.textContent;
         firstNum = +displayVal;
-        console.log(firstNum);
         display.textContent = firstNum;
         moi = true;
-        console.log(firstNum);
-    } else if (result) {
+    } else if (result !== "") {
         displayVal += e.target.textContent;
         console.log("moi");
         displayVal = +displayVal;
@@ -101,13 +99,12 @@ function addToDisplay (e) {
         secondNum = secondNum + e.target.textContent;
         secondNum = +secondNum;
         display.textContent = secondNum;
-        displayVal = 0;
+        displayVal = "";
     } else {
         firstNum += e.target.textContent;
         firstNum = +firstNum;
-        console.log(firstNum);
         display.textContent = firstNum;
-        displayVal = 0;
+        displayVal = "";
     }
     resultX2 = false;
     // check if displaytext is too long
@@ -125,7 +122,7 @@ function addToDisplay (e) {
 
         function clickOperator (e) {
             equalClicked = false;
-            if (e.target.textContent != "-" && firstNum == "") {
+            if (e.target.textContent != "-" && firstNum === "") {
                 return;
             }
         if (showMinusInDisp == true) {
@@ -133,7 +130,7 @@ function addToDisplay (e) {
             showMinusInDisp = false;
         }
 
-        if (e.target.textContent == "-" && firstNum == "") {
+        if (e.target.textContent == "-" && firstNum === "") {
             e.target.style.opacity = 0.3;
             minus = true;
             console.log("raiia");
@@ -143,25 +140,51 @@ function addToDisplay (e) {
             if (operat.style.opacity == "0.3") {
                 operat.style.opacity = "1";
             }
+        });
             if (moi == true) {
-                secondNum = 0;
-                displayVal = 0;
-                operator = " ";
+                secondNum = "";
+                displayVal = "";
+                operator = "";
                 console.log(firstNum, secondNum);
                 equalClicked = false;
                 result = false;
                 moi = false;
             }
 
-            if (operatorActive == true) {
+            if (operatorActive == true && secondNum !== "") {
+                console.log(secondNum);
                 result = operate(operator, firstNum, secondNum);
+
+                // check if dividing with zero and reset everything if that's the case
+                if (isFinite(result)) {
+                    result = result.toString().substring(0, 9);
+                    result = +result;
+                    display.textContent = result;
+                } else {
+                    display.textContent = "Error";
+                    listenerActive = false;
+                    operatorActive = false;
+                    minus = false;
+                    firstNumMinus = "-";
+                    showMinusInDisp = false;
+                    equalClicked = false;
+                    moi = false;
+
+                    firstNum = "";
+                    operator = "";
+                    secondNum = "";
+                    result = "";
+                    displayVal = "";
+                }
+                console.log(firstNum);
+                console.log(secondNum);
                 console.log(result);
-                result = result.toString().substring(0, 9);
-                result = +result;
-                display.textContent = result;
+                //result = result.toString().substring(0, 9);
+                //result = +result;
+                //display.textContent = result;
             }
 
-        });
+        //});
         resultX2 = true;
         minus = false;
         operatorActive = true;
@@ -184,20 +207,47 @@ equals.addEventListener("click", (e) => {
     if (secondNum === "") {
         result = operate(operator, firstNum, firstNum);
     }
-    else if (resultX2 == true) {
+    else if (resultX2 === true) {
         result = operate(operator,result, result)
     } else {
     result = operate(operator, firstNum, secondNum);
     }
+
+    // check if dividing with zero and reset everything if that's the case
+    if (isFinite(result)) {
+        result = result.toString().substring(0, 9);
+        result = +result;
+        display.textContent = result;
+        firstNum = result;
+        operatorActive = false;
+        equalClicked = true;
+        displayVal = 0;
+        resultX2 = false;
+    } else {
+        display.textContent = "Error";
+        listenerActive = false;
+        operatorActive = false;
+        minus = false;
+        firstNumMinus = "-";
+        showMinusInDisp = false;
+        equalClicked = false;
+        moi = false;
+
+        firstNum = "";
+        operator = "";
+        secondNum = "";
+        result = "";
+        displayVal = "";
+    }
     console.log(result);
-    result = result.toString().substring(0, 9);
+    /*result = result.toString().substring(0, 9);
     result = +result;
     display.textContent = result;
     firstNum = result;
     operatorActive = false;
     equalClicked = true;
     displayVal = 0;
-    resultX2 = false;
+    resultX2 = false;*/
 });
 
 //Function to clear the display
