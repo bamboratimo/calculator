@@ -30,6 +30,9 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
+// check if equals is clicked after operator, so the result is result + operator + result
+let resultX2 = false;
+
 let listenerActive = false;
 let operatorActive = false;
 let minus = false;
@@ -42,7 +45,7 @@ let moi = false;
 let firstNum = "";
 let operator = "";
 let secondNum = 0;
-let result = 0;
+let result = "";
 let displayVal = 0;
 let display = document.querySelector(".display");
 display.textContent = displayVal;
@@ -80,7 +83,7 @@ function addToDisplay (e) {
         console.log(firstNumMinus);
         showMinusInDisp = true;
         minus = false;
-    } else if (result != 0 && equalClicked == true) {
+    } else if (result != "" && equalClicked == true) {
         displayVal = displayVal + e.target.textContent;
         firstNum = +displayVal;
         console.log(firstNum);
@@ -106,6 +109,7 @@ function addToDisplay (e) {
         display.textContent = firstNum;
         displayVal = 0;
     }
+    resultX2 = false;
     // check if displaytext is too long
     if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
         numbers.forEach(num => {
@@ -156,7 +160,9 @@ function addToDisplay (e) {
                 result = +result;
                 display.textContent = result;
             }
+
         });
+        resultX2 = true;
         minus = false;
         operatorActive = true;
         e.target.style.opacity = "0.3";
@@ -175,7 +181,14 @@ equals.addEventListener("click", (e) => {
         });
     console.log(firstNum);
     console.log(secondNum);
+    if (secondNum === "") {
+        result = operate(operator, firstNum, firstNum);
+    }
+    else if (resultX2 == true) {
+        result = operate(operator,result, result)
+    } else {
     result = operate(operator, firstNum, secondNum);
+    }
     console.log(result);
     result = result.toString().substring(0, 9);
     result = +result;
@@ -184,6 +197,7 @@ equals.addEventListener("click", (e) => {
     operatorActive = false;
     equalClicked = true;
     displayVal = 0;
+    resultX2 = false;
 });
 
 //Function to clear the display
