@@ -30,6 +30,7 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
+let switchOperator = false; // a variable to not calculate result if switching from one operator to another
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 
 let listenerActive = false; //a variable to disable eventlistener on numbers
@@ -88,7 +89,6 @@ function addToDisplay (e) {
         startOver = true;
     } else if (result !== "") {
         displayVal += e.target.textContent;
-        console.log("moi");
         displayVal = +displayVal;
         secondNum = displayVal;
         display.textContent = secondNum;
@@ -103,8 +103,10 @@ function addToDisplay (e) {
         firstNum += e.target.textContent;
         firstNum = +firstNum;
         display.textContent = firstNum;
+        console.log(firstNum);
         displayVal = "";
     }
+    switchOperator = false;
     resultX2 = false;
 
     // check if displaytext is too long
@@ -141,7 +143,7 @@ function addToDisplay (e) {
                 operat.style.opacity = "1";
             }
         });
-            if (startOver == true) {
+            if (startOver === true) {
                 secondNum = "";
                 displayVal = "";
                 operator = "";
@@ -149,6 +151,12 @@ function addToDisplay (e) {
                 equalClicked = false;
                 result = "";
                 startOver = false;
+            }
+
+            if (switchOperator == true) {
+                operator = e.target.textContent.toString();
+                e.target.style.opacity = 0.3;
+                return;
             }
 
             if (operatorActive == true && secondNum !== "") {
@@ -178,14 +186,14 @@ function addToDisplay (e) {
                     return;
                 }
             }
-
-        resultX2 = true;
-        minus = false;
-        operatorActive = true;
-        e.target.style.opacity = "0.3";
-        displayVal = 0;
-        operator = e.target.textContent.toString();
-        numbers.forEach(num => {
+            switchOperator = true;
+            operator = e.target.textContent.toString();
+            resultX2 = true;
+            minus = false;
+            operatorActive = true;
+            e.target.style.opacity = "0.3";
+            displayVal = 0;
+            numbers.forEach(num => {
             num.addEventListener("click", addToDisplay);
         });
     }
@@ -219,6 +227,7 @@ equals.addEventListener("click", clickEquals);
         equalClicked = true;
         displayVal = "";
         resultX2 = false;
+        switchOperator = false;
     } else {
         display.textContent = "Error";
         listenerActive = false;
