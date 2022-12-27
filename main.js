@@ -30,10 +30,17 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
+
+function targetLessOpacity(e) {
+    return e.target.style.opacity = "0.3";
+}
+function targetNormalOpacity(e) {
+    return e.target.style.opacity = "1";
+}
 let switchOperator = false; // a variable to not calculate result if switching from one operator to another
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 
-let listenerActive = false; //a variable to disable eventlistener on numbers
+//let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
 let minus = false; //check if minus is clicked as a first number
 let firstNumMinus = "-"; //add a minus sign in front of a first number if minus is active
@@ -58,16 +65,11 @@ const operators = document.querySelectorAll(".operator");
 // activate eventListener for numbers
 numbers.forEach(num => {
     num.addEventListener("click", addToDisplay);
-    listenerActive = true;
-
+    //listenerActive = true;
 
     // make a number color change when pressing down
-    num.addEventListener("mousedown", (e) => {
-        e.target.style.opacity = "0.3";
-    });
-    num.addEventListener("mouseup", (e) => {
-        e.target.style.opacity = "1";
-    });
+    num.addEventListener("mousedown", targetLessOpacity);
+    num.addEventListener("mouseup", targetNormalOpacity);
 });
 
 
@@ -113,7 +115,7 @@ function addToDisplay (e) {
     if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
         numbers.forEach(num => {
             num.removeEventListener("click", addToDisplay)
-            listenerActive = false;
+            //listenerActive = false;
         });
     }
 }
@@ -170,7 +172,7 @@ function addToDisplay (e) {
                     display.textContent = result;
                 } else {
                     display.textContent = "Error";
-                    listenerActive = false;
+                    //listenerActive = false;
                     operatorActive = false;
                     minus = false;
                     firstNumMinus = "-";
@@ -230,7 +232,7 @@ equals.addEventListener("click", clickEquals);
         switchOperator = false;
     } else {
         display.textContent = "Error";
-        listenerActive = false;
+        //listenerActive = false;
         operatorActive = false;
         minus = false;
         firstNumMinus = "-";
@@ -253,7 +255,7 @@ clear.addEventListener("click", clearScreen);
 //Function to clear the display
     function clearScreen(e) {
     display.textContent = 0;
-    listenerActive = false;
+    //listenerActive = false;
     operatorActive = false;
     minus = false;
     firstNumMinus = "-";
@@ -269,10 +271,10 @@ clear.addEventListener("click", clearScreen);
     operators.forEach(operat => {
         operat.style.opacity = "1";            
     });
-    if (listenerActive == false) {
+    /*if (listenerActive == false) {
         numbers.forEach(num => {
             num.addEventListener("click", addToDisplay);
             listenerActive = true;
         });
-    }
+    }*/
 };
