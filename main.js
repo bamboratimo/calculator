@@ -30,6 +30,11 @@ function operate(operator, num1, num2) {
                 break;       
         }
 }
+function operatorsNormalOpacity(e) {
+    operators.forEach(operat => {
+    operat.style.opacity = "1";            
+});
+}
 
 function targetLessOpacity(e) {
     return e.target.style.opacity = "0.3";
@@ -72,19 +77,16 @@ numbers.forEach(num => {
     num.addEventListener("mouseup", targetNormalOpacity);
 });
 
-
 function addToDisplay (e) {
-    operators.forEach(operat => {
-        operat.style.opacity = "1";            
-    });
-     if (minus == true) {
+    operatorsNormalOpacity();
+    if (minus == true) {
         firstNumMinus += e.target.textContent;
         display.textContent = firstNumMinus.substring(1);
         firstNum = +firstNumMinus;
-        console.log(firstNumMinus);
         showMinusInDisp = true;
         minus = false;
-    } else if (result != "" && equalClicked == true) {
+        }
+     else if (result != "" && equalClicked == true) {
         displayVal = displayVal + e.target.textContent;
         firstNum = +displayVal;
         display.textContent = firstNum;
@@ -112,102 +114,84 @@ function addToDisplay (e) {
     resultX2 = false;
 
     // check if displaytext is too long
-    if (display.textContent.length >= 9) /*|| secondNum.toString().length >= 9)*/ {
+    if (display.textContent.length >= 9) {
         numbers.forEach(num => {
             num.removeEventListener("click", addToDisplay)
             //listenerActive = false;
         });
     }
 }
+operators.forEach(oper => {
+    oper.addEventListener("click", clickOperator);
+});
 
-        operators.forEach(oper => {
-            oper.addEventListener("click", clickOperator);
-        });
-
-        function clickOperator (e) {
-            equalClicked = false;
-            if (e.target.textContent != "-" && firstNum === "") {
-                return;
-            }
-        if (showMinusInDisp == true) {
-            display.textContent = firstNumMinus;
-            showMinusInDisp = false;
-        }
-
-        if (e.target.textContent == "-" && firstNum === "") {
-            e.target.style.opacity = 0.3;
-            minus = true;
-            console.log("raiia");
-            return;
-        }
-        operators.forEach(operat => {
-            if (operat.style.opacity == "0.3") {
-                operat.style.opacity = "1";
-            }
-        });
-            if (startOver === true) {
-                secondNum = "";
-                displayVal = "";
-                operator = "";
-                console.log(firstNum, secondNum);
-                equalClicked = false;
-                result = "";
-                startOver = false;
-            }
-
-            if (switchOperator == true) {
-                operator = e.target.textContent.toString();
-                e.target.style.opacity = 0.3;
-                return;
-            }
-
-            if (operatorActive == true && secondNum !== "") {
-                console.log(secondNum);
-                result = operate(operator, firstNum, secondNum);
-
-                // check if dividing with zero and reset everything if that's the case
-                if (isFinite(result)) {
-                    result = result.toString().substring(0, 9);
-                    result = +result;
-                    display.textContent = result;
-                } else {
-                    display.textContent = "Error";
-                    //listenerActive = false;
-                    operatorActive = false;
-                    minus = false;
-                    firstNumMinus = "-";
-                    showMinusInDisp = false;
-                    equalClicked = false;
-                    startOver = false;
-
-                    firstNum = "";
-                    operator = "";
-                    secondNum = "";
-                    result = "";
-                    displayVal = "";
-                    return;
-                }
-            }
-            switchOperator = true;
-            operator = e.target.textContent.toString();
-            resultX2 = true;
-            minus = false;
-            operatorActive = true;
-            e.target.style.opacity = "0.3";
-            displayVal = 0;
-            numbers.forEach(num => {
-            num.addEventListener("click", addToDisplay);
-        });
+function clickOperator (e) {
+    equalClicked = false;
+    if (e.target.textContent != "-" && firstNum === "") {
+        return;
+    }
+    if (showMinusInDisp == true) {
+        display.textContent = firstNumMinus;
+        showMinusInDisp = false;
     }
 
+    if (e.target.textContent == "-" && firstNum === "") {
+        targetLessOpacity(e);
+        minus = true;
+        console.log("raiia");
+        return;
+    }
+    operators.forEach(operat => {
+        if (operat.style.opacity == "0.3") {
+            operatorsNormalOpacity();
+        }
+    });
+
+    if (startOver === true) {
+        secondNum = "";
+        displayVal = "";
+        operator = "";
+        equalClicked = false;
+        result = "";
+        startOver = false;
+    }
+
+    if (switchOperator == true) {
+        operator = e.target.textContent.toString();
+        targetLessOpacity(e);
+        return;
+    }
+
+    if (operatorActive == true && secondNum !== "") {
+        result = operate(operator, firstNum, secondNum);
+
+        // check if dividing with zero and reset everything if that's the case
+        if (result != "Infinity") {
+            result = result.toString().substring(0, 9);
+            result = +result;
+            display.textContent = result;
+        } else {
+            clearScreen();
+            return;
+        }
+    }
+    switchOperator = true;
+    operator = e.target.textContent.toString();
+    resultX2 = true;
+    minus = false;
+    operatorActive = true;
+    targetLessOpacity(e);
+    displayVal = 0;
+    numbers.forEach(num => {
+        num.addEventListener("click", addToDisplay);
+    });
+};
 
 const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", clickEquals);
 
-    function clickEquals(e) {
-    operators.forEach(operat => {
-            operat.style.opacity = "1";            
-        });
+function clickEquals(e) {
+    operatorsNormalOpacity();
     console.log(firstNum);
     console.log(secondNum);
     if (secondNum === "") {
@@ -216,11 +200,15 @@ equals.addEventListener("click", clickEquals);
     else if (resultX2 === true) {
         result = operate(operator,result, result)
     } else {
-    result = operate(operator, firstNum, secondNum);
+        result = operate(operator, firstNum, secondNum);
     }
-
+    
     // check if dividing with zero and reset everything if that's the case
-    if (isFinite(result)) {
+    if (result != "Infinity") {
+        // check if pressing equals before giving secondNum
+        if(!secondNum) {
+            result = firstNum;
+        }
         result = result.toString().substring(0, 9);
         result = +result;
         display.textContent = result;
@@ -231,20 +219,7 @@ equals.addEventListener("click", clickEquals);
         resultX2 = false;
         switchOperator = false;
     } else {
-        display.textContent = "Error";
-        //listenerActive = false;
-        operatorActive = false;
-        minus = false;
-        firstNumMinus = "-";
-        showMinusInDisp = false;
-        equalClicked = false;
-        startOver = false;
-
-        firstNum = "";
-        operator = "";
-        secondNum = "";
-        result = "";
-        displayVal = "";
+        clearScreen();
     }
 }
 
@@ -253,9 +228,13 @@ const clear = document.querySelector(".clear-btn");
 clear.addEventListener("click", clearScreen);
 
 //Function to clear the display
-    function clearScreen(e) {
-    display.textContent = 0;
-    //listenerActive = false;
+function clearScreen(e) {
+    if(result == "Infinity") {
+        display.textContent = "Error";
+    } else {
+        display.textContent = 0;
+    }
+    listenerActive = false;
     operatorActive = false;
     minus = false;
     firstNumMinus = "-";
@@ -269,12 +248,12 @@ clear.addEventListener("click", clearScreen);
     result = "";
     displayVal = "";
     operators.forEach(operat => {
-        operat.style.opacity = "1";            
+        operat.style.opacity = "1";
     });
-    /*if (listenerActive == false) {
+    if (listenerActive == false) {
         numbers.forEach(num => {
             num.addEventListener("click", addToDisplay);
             listenerActive = true;
         });
-    }*/
+    }
 };
