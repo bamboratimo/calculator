@@ -15,21 +15,21 @@ function divide (num1, num2) {
 }
 
 function operate(operator, num1, num2) {
-        switch (operator) {
-            case "+":
-                return add(num1, num2);
-                break;
-            case "-":
-                return subtract(num1, num2);
-                break;
-            case "*":
-                return multiply(num1, num2);
-                break;
-            case "/":
-                return divide(num1, num2);
-                break;       
+    switch (operator) {
+        case "+":
+            return add(num1, num2);
+
+        case "-":
+            return subtract(num1, num2);
+
+        case "*":
+            return multiply(num1, num2);
+
+        case "/":
+            return divide(num1, num2);    
         }
 }
+
 function operatorsNormalOpacity(e) {
     operators.forEach(operat => {
     operat.style.opacity = "1";            
@@ -45,7 +45,7 @@ function targetNormalOpacity(e) {
 let switchOperator = false; // a variable to not calculate result if switching from one operator to another
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 
-//let listenerActive = false; //a variable to disable eventlistener on numbers
+let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
 let minus = false; //check if minus is clicked as a first number
 let firstNumMinus = "-"; //add a minus sign in front of a first number if minus is active
@@ -61,21 +61,27 @@ let displayVal = "";
 let display = document.querySelector(".display");
 display.textContent = 0;
 
+let decimal = document.querySelector(".decimal-btn");
 let buttons = document.querySelector("buttons");
-
 let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
 const operators = document.querySelectorAll(".operator");
+console.log(decimal.textContent);
 
 // activate eventListener for numbers
 numbers.forEach(num => {
     num.addEventListener("click", addToDisplay);
-    //listenerActive = true;
+    listenerActive = true;
 
     // make a number color change when pressing down
     num.addEventListener("mousedown", targetLessOpacity);
     num.addEventListener("mouseup", targetNormalOpacity);
 });
+
+decimal.addEventListener("click", addDecimal);
+
+decimal.addEventListener("mousedown", targetLessOpacity);
+decimal.addEventListener("mouseup", targetNormalOpacity);
 
 function addToDisplay (e) {
     operatorsNormalOpacity();
@@ -117,10 +123,11 @@ function addToDisplay (e) {
     if (display.textContent.length >= 9) {
         numbers.forEach(num => {
             num.removeEventListener("click", addToDisplay)
-            //listenerActive = false;
+            listenerActive = false;
         });
     }
 }
+//add eventListeners for operator buttons
 operators.forEach(oper => {
     oper.addEventListener("click", clickOperator);
 });
@@ -187,6 +194,33 @@ function clickOperator (e) {
     });
 };
 
+function addDecimal (e) {
+    if (display.textContent.includes(".")) {
+        return;
+    }
+    if (result != "" && equalClicked == true) {
+        displayVal += decimal.textContent;
+        display.textContent = displayVal;
+        startOver = true;
+    } else if (result !== "") {
+        displayVal += decimal.textContent;
+        secondNum = displayVal;
+        display.textContent = secondNum;
+        firstNum = result;
+    } else if (operator !== "") {
+        console.log("hei");
+        secondNum += decimal.textContent;
+        display.textContent = secondNum;
+        displayVal = "";
+    } else {
+        firstNum += decimal.textContent;
+        console.log(firstNum);
+        display.textContent = firstNum;
+        console.log(firstNum);
+        displayVal = "";
+    }
+}
+
 const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", clickEquals);
 
@@ -198,7 +232,7 @@ function clickEquals(e) {
         result = operate(operator, firstNum, firstNum);
     }
     else if (resultX2 === true) {
-        result = operate(operator,result, result)
+        result = operate(operator, result, result)
     } else {
         result = operate(operator, firstNum, secondNum);
     }
