@@ -66,11 +66,10 @@ let buttons = document.querySelector("buttons");
 let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
 const operators = document.querySelectorAll(".operator");
-console.log(decimal.textContent);
 
 // activate eventListener for numbers
 numbers.forEach(num => {
-    num.addEventListener("click", addToDisplay);
+    num.addEventListener("click", clickNumber);
     listenerActive = true;
 
     // make a number color change when pressing down
@@ -83,7 +82,11 @@ decimal.addEventListener("click", addDecimal);
 decimal.addEventListener("mousedown", targetLessOpacity);
 decimal.addEventListener("mouseup", targetNormalOpacity);
 
-function addToDisplay (e) {
+function addToDisplay() {
+    display.textContent = displayVal;
+}
+
+function clickNumber (e) {
     operatorsNormalOpacity();
     if (minus == true) {
         firstNumMinus += e.target.textContent;
@@ -91,38 +94,29 @@ function addToDisplay (e) {
         firstNum = +firstNumMinus;
         showMinusInDisp = true;
         minus = false;
-        }
-     else if (result != "" && equalClicked == true) {
-        displayVal = displayVal + e.target.textContent;
-        firstNum = +displayVal;
-        display.textContent = firstNum;
+    } else if (result != "" && equalClicked == true) {
+        displayVal += e.target.textContent;
+        firstNum = +displayVal;//
         startOver = true;
     } else if (result !== "") {
         displayVal += e.target.textContent;
-        displayVal = +displayVal;
-        secondNum = displayVal;
-        display.textContent = secondNum;
+        secondNum = +displayVal;//
         firstNum = result;
     } else if (operator !== "") {
-        console.log("hei");
-        secondNum = secondNum + e.target.textContent;
-        secondNum = +secondNum;
-        display.textContent = secondNum;
-        displayVal = "";
+        displayVal += e.target.textContent;//
+        secondNum = +displayVal;//
     } else {
-        firstNum += e.target.textContent;
-        firstNum = +firstNum;
-        display.textContent = firstNum;
-        console.log(firstNum);
-        displayVal = "";
+        displayVal += e.target.textContent;//
+        firstNum = +displayVal;//
     }
     switchOperator = false;
     resultX2 = false;
+    addToDisplay();
 
     // check if displaytext is too long
     if (display.textContent.length >= 9) {
         numbers.forEach(num => {
-            num.removeEventListener("click", addToDisplay)
+            num.removeEventListener("click", clickNumber)
             listenerActive = false;
         });
     }
@@ -188,9 +182,9 @@ function clickOperator (e) {
     minus = false;
     operatorActive = true;
     targetLessOpacity(e);
-    displayVal = 0;
+    displayVal = "";
     numbers.forEach(num => {
-        num.addEventListener("click", addToDisplay);
+        num.addEventListener("click", clickNumber);
     });
 };
 
@@ -198,27 +192,28 @@ function addDecimal (e) {
     if (display.textContent.includes(".")) {
         return;
     }
+    if (display.textContent == "0") {
+        displayVal = "0.";
+        firstNum = +displayVal;
+        console.log("kakkeli");
+        return;
+    }
     if (result != "" && equalClicked == true) {
-        displayVal += decimal.textContent;
-        display.textContent = displayVal;
+        displayVal += e.target.textContent;
+        firstNum += displayVal;
         startOver = true;
     } else if (result !== "") {
-        displayVal += decimal.textContent;
-        secondNum = displayVal;
-        display.textContent = secondNum;
+        displayVal += e.target.textContent;
+        secondNum = +displayVal;
         firstNum = result;
     } else if (operator !== "") {
-        console.log("hei");
-        secondNum += decimal.textContent;
-        display.textContent = secondNum;
-        displayVal = "";
+        displayVal += e.target.textContent;//
+        secondNum = +displayVal;//
     } else {
-        firstNum += decimal.textContent;
-        console.log(firstNum);
-        display.textContent = firstNum;
-        console.log(firstNum);
-        displayVal = "";
+        displayVal += e.target.textContent;//
+        firstNum = +displayVal;
     }
+    addToDisplay();
 }
 
 const equals = document.querySelector(".equals-btn");
@@ -286,7 +281,7 @@ function clearScreen(e) {
     });
     if (listenerActive == false) {
         numbers.forEach(num => {
-            num.addEventListener("click", addToDisplay);
+            num.addEventListener("click", clickNumber);
             listenerActive = true;
         });
     }
