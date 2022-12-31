@@ -48,8 +48,6 @@ let resultX2 = false; //check if equals is clicked after operator, so the result
 let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
 let minus = false; //check if minus is clicked as a first number
-let firstNumMinus = "-"; //add a minus sign in front of a first number if minus is active
-let showMinusInDisp = false; //a variable for displaying minus sign if first digit is minus after pressing operator
 let equalClicked = false; //check if equals button is clicked
 let startOver = false; //a variable to determine if a whole new calculation should start after clicking equals button
 
@@ -90,11 +88,8 @@ function clickNumber (e) {
     operatorsNormalOpacity();
     if (minus == true) {
         displayVal += e.target.textContent;
-        firstNumMinus += displayVal;
-        display.textContent = firstNumMinus.substring(1);
-        firstNum = +firstNumMinus;
-        showMinusInDisp = true;
-        minus = false;
+        display.textContent = displayVal;
+        firstNum = +displayVal;
     } else if (result != "" && equalClicked == true) {
         displayVal += e.target.textContent;
         firstNum = +displayVal;//
@@ -132,15 +127,15 @@ function clickOperator (e) {
     if (e.target.textContent != "-" && firstNum === "") {
         return;
     }
-    if (showMinusInDisp == true) {
-        display.textContent = firstNumMinus;
-        showMinusInDisp = false;
+    if (minus == true) {
+        displayVal = "-" + displayVal;
+        display.textContent = displayVal;
+        firstNum = +displayVal;
     }
 
     if (e.target.textContent == "-" && firstNum === "") {
         targetLessOpacity(e);
         minus = true;
-        console.log("raiia");
         return;
     }
     operators.forEach(operat => {
@@ -189,31 +184,16 @@ function clickOperator (e) {
     });
 };
 
-function addDecimal (e) {
+function addDecimal(e) {
     if (display.textContent.includes(".")) {
         return;
     }
     if (display.textContent == "0") {
         displayVal = "0.";
+        addToDisplay();
         firstNum = +displayVal;
-        console.log("kakkeli");
         return;
     }
-    /*if (result != "" && equalClicked == true) {
-        displayVal += e.target.textContent;
-        firstNum += displayVal;
-        startOver = true;
-    } else if (result !== "") {
-        displayVal += e.target.textContent;
-        secondNum = +displayVal;
-        firstNum = result;
-    } else if (operator !== "") {
-        displayVal += e.target.textContent;//
-        secondNum = +displayVal;//
-    } else {
-        displayVal += e.target.textContent;//
-        firstNum = +displayVal;
-    }*/
     displayVal += e.target.textContent;
     addToDisplay();
 }
@@ -223,8 +203,7 @@ equals.addEventListener("click", clickEquals);
 
 function clickEquals(e) {
     operatorsNormalOpacity();
-    console.log(firstNum);
-    console.log(secondNum);
+    
     if (secondNum === "") {
         result = operate(operator, firstNum, firstNum);
     }
@@ -269,7 +248,6 @@ function clearScreen(e) {
     operatorActive = false;
     minus = false;
     firstNumMinus = "-";
-    showMinusInDisp = false;
     equalClicked = false;
     startOver = false;
 
