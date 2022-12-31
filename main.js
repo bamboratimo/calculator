@@ -89,7 +89,8 @@ function addToDisplay() {
 function clickNumber (e) {
     operatorsNormalOpacity();
     if (minus == true) {
-        firstNumMinus += e.target.textContent;
+        displayVal += e.target.textContent;
+        firstNumMinus += displayVal;
         display.textContent = firstNumMinus.substring(1);
         firstNum = +firstNumMinus;
         showMinusInDisp = true;
@@ -198,7 +199,7 @@ function addDecimal (e) {
         console.log("kakkeli");
         return;
     }
-    if (result != "" && equalClicked == true) {
+    /*if (result != "" && equalClicked == true) {
         displayVal += e.target.textContent;
         firstNum += displayVal;
         startOver = true;
@@ -212,7 +213,8 @@ function addDecimal (e) {
     } else {
         displayVal += e.target.textContent;//
         firstNum = +displayVal;
-    }
+    }*/
+    displayVal += e.target.textContent;
     addToDisplay();
 }
 
