@@ -44,7 +44,6 @@ function targetNormalOpacity(e) {
 }
 let switchOperator = false; // a variable to not calculate result if switching from one operator to another
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
-
 let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
 let minus = false; //check if minus is clicked as a first number
@@ -85,6 +84,9 @@ function addToDisplay() {
 }
 
 function clickNumber (e) {
+    if (displayVal === "0") {
+        displayVal = "";
+    }
     operatorsNormalOpacity();
     if (minus == true) {
         displayVal += e.target.textContent;
@@ -92,18 +94,18 @@ function clickNumber (e) {
         firstNum = +displayVal;
     } else if (result != "" && equalClicked == true) {
         displayVal += e.target.textContent;
-        firstNum = +displayVal;//
+        firstNum = +displayVal;
         startOver = true;
     } else if (result !== "") {
         displayVal += e.target.textContent;
-        secondNum = +displayVal;//
+        secondNum = +displayVal;
         firstNum = result;
     } else if (operator !== "") {
-        displayVal += e.target.textContent;//
-        secondNum = +displayVal;//
+        displayVal += e.target.textContent;
+        secondNum = +displayVal;
     } else {
-        displayVal += e.target.textContent;//
-        firstNum = +displayVal;//
+        displayVal += e.target.textContent;
+        firstNum = +displayVal;
     }
     switchOperator = false;
     resultX2 = false;
@@ -185,16 +187,18 @@ function clickOperator (e) {
 };
 
 function addDecimal(e) {
-    if (display.textContent.includes(".")) {
+    operatorsNormalOpacity();
+    if (displayVal.includes(".")) {
         return;
     }
-    if (display.textContent == "0") {
+    if (display.textContent == result || display.textContent === "0" || (operatorActive == true && secondNum == "")) {
         displayVal = "0.";
         addToDisplay();
-        firstNum = +displayVal;
+        console.log("niina");
         return;
     }
     displayVal += e.target.textContent;
+    firstNum = +displayVal;
     addToDisplay();
 }
 
@@ -216,8 +220,9 @@ function clickEquals(e) {
     // check if dividing with zero and reset everything if that's the case
     if (result != "Infinity") {
         // check if pressing equals before giving secondNum
-        if(!secondNum) {
+        if(secondNum === "") {
             result = firstNum;
+            console.log("kkkk");
         }
         result = result.toString().substring(0, 9);
         result = +result;
