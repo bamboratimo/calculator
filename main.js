@@ -55,14 +55,16 @@ let operator = "";
 let secondNum = "";
 let result = "";
 let displayVal = "";
-let display = document.querySelector(".display");
-display.textContent = 0;
 
 let decimal = document.querySelector(".decimal-btn");
 let buttons = document.querySelector("buttons");
 let digits = document.querySelectorAll(".digit");
 let numbers = document.querySelectorAll(".num");
 const operators = document.querySelectorAll(".operator");
+let display = document.querySelector(".display");
+let percent = document.querySelector(".percent-btn");
+
+display.textContent = 0;
 
 // activate eventListener for numbers
 numbers.forEach(num => {
@@ -79,6 +81,11 @@ decimal.addEventListener("click", addDecimal);
 decimal.addEventListener("mousedown", targetLessOpacity);
 decimal.addEventListener("mouseup", targetNormalOpacity);
 
+percent.addEventListener("click", addPercent);
+
+percent.addEventListener("mousedown", targetLessOpacity);
+percent.addEventListener("mouseup", targetNormalOpacity);
+
 function addToDisplay() {
     display.textContent = displayVal;
 }
@@ -87,6 +94,7 @@ function clickNumber (e) {
     if (displayVal === "0") {
         displayVal = "";
     }
+
     operatorsNormalOpacity();
     if (minus == true) {
         displayVal += e.target.textContent;
@@ -194,11 +202,36 @@ function addDecimal(e) {
     if (display.textContent == result || display.textContent === "0" || (operatorActive == true && secondNum == "")) {
         displayVal = "0.";
         addToDisplay();
-        console.log("niina");
         return;
     }
     displayVal += e.target.textContent;
-    firstNum = +displayVal;
+    addToDisplay();
+}
+
+function addPercent(e) {
+    operatorsNormalOpacity();
+    displayVal = displayVal / 100;
+    if (+display.textContent === result) {
+        displayVal = result;
+        displayVal = displayVal / 100;
+        display.textContent = displayVal;
+    }
+    if (minus == true) {
+        //display.textContent = displayVal;
+        firstNum = +displayVal;
+    } else if (result != "" && equalClicked == true) {
+        firstNum = +displayVal;
+        startOver = true;
+    } else if (result !== "") {
+        secondNum = +displayVal;
+        firstNum = result;
+    } else if (operator !== "") {
+        secondNum = +displayVal;
+    } else {
+        firstNum = +displayVal;
+    }
+    switchOperator = false;
+    resultX2 = false;
     addToDisplay();
 }
 
