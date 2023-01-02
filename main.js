@@ -46,7 +46,6 @@ let switchOperator = false; // a variable to not calculate result if switching f
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
-let minus = false; //check if minus is clicked as a first number
 let equalClicked = false; //check if equals button is clicked
 let startOver = false; //a variable to determine if a whole new calculation should start after clicking equals button
 
@@ -96,23 +95,16 @@ function clickNumber (e) {
     }
 
     operatorsNormalOpacity();
-    if (minus == true) {
-        displayVal += e.target.textContent;
-        display.textContent = displayVal;
-        firstNum = +displayVal;
-    } else if (result != "" && equalClicked == true) {
-        displayVal += e.target.textContent;
+    displayVal += e.target.textContent;
+   if (result != "" && equalClicked == true) {
         firstNum = +displayVal;
         startOver = true;
     } else if (result !== "") {
-        displayVal += e.target.textContent;
         secondNum = +displayVal;
         firstNum = result;
-    } else if (operator !== "") {
-        displayVal += e.target.textContent;
+    } else if (operator != "") {
         secondNum = +displayVal;
     } else {
-        displayVal += e.target.textContent;
         firstNum = +displayVal;
     }
     switchOperator = false;
@@ -133,26 +125,9 @@ operators.forEach(oper => {
 });
 
 function clickOperator (e) {
+    
+    operatorsNormalOpacity();
     equalClicked = false;
-    if (e.target.textContent != "-" && firstNum === "") {
-        return;
-    }
-    if (minus == true) {
-        displayVal = "-" + displayVal;
-        display.textContent = displayVal;
-        firstNum = +displayVal;
-    }
-
-    if (e.target.textContent == "-" && firstNum === "") {
-        targetLessOpacity(e);
-        minus = true;
-        return;
-    }
-    operators.forEach(operat => {
-        if (operat.style.opacity == "0.3") {
-            operatorsNormalOpacity();
-        }
-    });
 
     if (startOver === true) {
         secondNum = "";
@@ -177,6 +152,7 @@ function clickOperator (e) {
             result = result.toString().substring(0, 9);
             result = +result;
             display.textContent = result;
+            console.log(result);
         } else {
             clearScreen();
             return;
@@ -185,7 +161,6 @@ function clickOperator (e) {
     switchOperator = true;
     operator = e.target.textContent.toString();
     resultX2 = true;
-    minus = false;
     operatorActive = true;
     targetLessOpacity(e);
     displayVal = "";
@@ -208,18 +183,15 @@ function addDecimal(e) {
     addToDisplay();
 }
 
-function addPercent(e) {
+function addPercent() {
     operatorsNormalOpacity();
     displayVal = displayVal / 100;
     if (+display.textContent === result) {
         displayVal = result;
         displayVal = displayVal / 100;
-        display.textContent = displayVal;
+        addToDisplay();
     }
-    if (minus == true) {
-        //display.textContent = displayVal;
-        firstNum = +displayVal;
-    } else if (result != "" && equalClicked == true) {
+    if (result != "" && equalClicked == true) {
         firstNum = +displayVal;
         startOver = true;
     } else if (result !== "") {
@@ -255,7 +227,6 @@ function clickEquals(e) {
         // check if pressing equals before giving secondNum
         if(secondNum === "") {
             result = firstNum;
-            console.log("kkkk");
         }
         result = result.toString().substring(0, 9);
         result = +result;
@@ -284,8 +255,6 @@ function clearScreen(e) {
     }
     listenerActive = false;
     operatorActive = false;
-    minus = false;
-    firstNumMinus = "-";
     equalClicked = false;
     startOver = false;
 
