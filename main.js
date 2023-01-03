@@ -30,7 +30,7 @@ function operate(operator, num1, num2) {
         }
 }
 
-function operatorsNormalOpacity(e) {
+function operatorsNormalOpacity() {
     operators.forEach(operat => {
     operat.style.opacity = "1";            
 });
@@ -44,7 +44,6 @@ function targetNormalOpacity(e) {
 }
 let switchOperator = false; // a variable to not calculate result if switching from one operator to another
 let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
-let listenerActive = false; //a variable to disable eventlistener on numbers
 let operatorActive = false; // check if operator button is clicked
 let equalClicked = false; //check if equals button is clicked
 let startOver = false; //a variable to determine if a whole new calculation should start after clicking equals button
@@ -55,20 +54,19 @@ let secondNum = "";
 let result = "";
 let displayVal = "";
 
-let decimal = document.querySelector(".decimal-btn");
-let buttons = document.querySelector("buttons");
-let digits = document.querySelectorAll(".digit");
-let numbers = document.querySelectorAll(".num");
+const decimal = document.querySelector(".decimal-btn");
+const buttons = document.querySelector("buttons");
+const digits = document.querySelectorAll(".digit");
+const numbers = document.querySelectorAll(".num");
 const operators = document.querySelectorAll(".operator");
-let display = document.querySelector(".display");
-let percent = document.querySelector(".percent-btn");
+const display = document.querySelector(".display");
+const percent = document.querySelector(".percent-btn");
 
 display.textContent = 0;
 
 // activate eventListener for numbers
 numbers.forEach(num => {
     num.addEventListener("click", clickNumber);
-    listenerActive = true;
 
     // make a number color change when pressing down
     num.addEventListener("mousedown", targetLessOpacity);
@@ -93,43 +91,35 @@ function clickNumber (e) {
     if (displayVal === "0") {
         displayVal = "";
     }
-
-    operatorsNormalOpacity();
-    displayVal += e.target.textContent;
-   if (result != "" && equalClicked == true) {
-        firstNum = +displayVal;
-        startOver = true;
-    } else if (result !== "") {
-        secondNum = +displayVal;
-        firstNum = result;
-    } else if (operator != "") {
-        secondNum = +displayVal;
-    } else {
-        firstNum = +displayVal;
-    }
-    switchOperator = false;
-    resultX2 = false;
-    addToDisplay();
-
-    // check if displaytext is too long
-    if (display.textContent.length >= 9) {
-        numbers.forEach(num => {
-            num.removeEventListener("click", clickNumber)
-            listenerActive = false;
-        });
+    if (displayVal.length < 9) {
+        operatorsNormalOpacity();
+        displayVal += e.target.textContent;
+        if (result != "" && equalClicked == true) {
+            firstNum = +displayVal;
+            startOver = true;
+        } else if (result !== "") {
+            secondNum = +displayVal;
+            firstNum = result;
+        } else if (operator != "") {
+            secondNum = +displayVal;
+        } else {
+            firstNum = +displayVal;
+        }
+        switchOperator = false;
+        resultX2 = false;
+        addToDisplay();
     }
 }
+
 //add eventListeners for operator buttons
 operators.forEach(oper => {
     oper.addEventListener("click", clickOperator);
 });
 
 function clickOperator (e) {
-    
     operatorsNormalOpacity();
-    equalClicked = false;
-
-    if (startOver === true) {
+   
+    if (equalClicked === true) {
         secondNum = "";
         displayVal = "";
         operator = "";
@@ -149,10 +139,8 @@ function clickOperator (e) {
 
         // check if dividing with zero and reset everything if that's the case
         if (result != "Infinity") {
-            result = result.toString().substring(0, 9);
-            result = +result;
+            result = +result.toString().substring(0, 9);
             display.textContent = result;
-            console.log(result);
         } else {
             clearScreen();
             return;
@@ -164,9 +152,6 @@ function clickOperator (e) {
     operatorActive = true;
     targetLessOpacity(e);
     displayVal = "";
-    numbers.forEach(num => {
-        num.addEventListener("click", clickNumber);
-    });
 };
 
 function addDecimal(e) {
@@ -215,21 +200,20 @@ function clickEquals(e) {
     
     if (secondNum === "") {
         result = operate(operator, firstNum, firstNum);
+        console.log("kakkka");
     }
     else if (resultX2 === true) {
-        result = operate(operator, result, result)
+        result = operate(operator, result, result);
+        console.log(result);
     } else {
         result = operate(operator, firstNum, secondNum);
+        console.log(firstNum);
     }
-    
+
     // check if dividing with zero and reset everything if that's the case
     if (result != "Infinity") {
         // check if pressing equals before giving secondNum
-        if(secondNum === "") {
-            result = firstNum;
-        }
-        result = result.toString().substring(0, 9);
-        result = +result;
+        result = +result.toString().substring(0, 9);
         display.textContent = result;
         firstNum = result;
         operatorActive = false;
@@ -242,18 +226,16 @@ function clickEquals(e) {
     }
 }
 
-
 const clear = document.querySelector(".clear-btn");
 clear.addEventListener("click", clearScreen);
 
 //Function to clear the display
-function clearScreen(e) {
-    if(result == "Infinity") {
+function clearScreen() {
+    if(result === "Infinity") {
         display.textContent = "Error";
     } else {
         display.textContent = 0;
     }
-    listenerActive = false;
     operatorActive = false;
     equalClicked = false;
     startOver = false;
@@ -263,13 +245,5 @@ function clearScreen(e) {
     secondNum = "";
     result = "";
     displayVal = "";
-    operators.forEach(operat => {
-        operat.style.opacity = "1";
-    });
-    if (listenerActive == false) {
-        numbers.forEach(num => {
-            num.addEventListener("click", clickNumber);
-            listenerActive = true;
-        });
-    }
+    operatorsNormalOpacity();
 };
