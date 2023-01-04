@@ -42,8 +42,6 @@ function targetLessOpacity(e) {
 function targetNormalOpacity(e) {
     return e.target.style.opacity = "1";
 }
-let switchOperator = false; // a variable to not calculate result if switching from one operator to another
-let resultX2 = false; //check if equals is clicked after operator, so the result is result + operator + result
 let operatorActive = false; // check if operator button is clicked
 let equalClicked = false; //check if equals button is clicked
 
@@ -102,8 +100,7 @@ function clickNumber (e) {
         } else {
             firstNum = +displayVal;
         }
-        switchOperator = false;
-        resultX2 = false;
+        operatorActive = false;
         addToDisplay();
     }
 }
@@ -120,35 +117,30 @@ function clickOperator (e) {
         displayVal = "";
         result = "";
     }
-    if (switchOperator == true) {
-        operator = e.target.textContent.toString();
+    if (operatorActive){
+        operator = e.target.textContent;
         targetLessOpacity(e);
         return;
     }
-
-    if (operatorActive == true && secondNum !== "") {
+    if (equalClicked == false && secondNum !== "") {
         result = operate(operator, firstNum, secondNum);
         // check if dividing with zero and reset everything if that's the case
         if (result != "Infinity") {
             result = +result.toString().substring(0, 9);
             display.textContent = result;
-            console.log(firstNum, secondNum);
         } else {
             clearScreen();
             return;
         }
     }
-    equalClicked = false;//
-    switchOperator = true;
+    equalClicked = false;
     operator = e.target.textContent.toString();
-    resultX2 = true;
     operatorActive = true;
     targetLessOpacity(e);
     displayVal = "";
 };
 
 function addDecimal(e) {
-    resultX2 = false;
     operatorsNormalOpacity();
     if (displayVal.includes(".")) {
         return;
@@ -158,6 +150,7 @@ function addDecimal(e) {
         displayVal = "0.";
         secondNum = +displayVal;
     }
+    operatorActive = false;//
     addToDisplay();
 }
 
@@ -179,8 +172,6 @@ function addPercent() {
     } else {
         firstNum = +displayVal;
     }
-    switchOperator = false;
-    resultX2 = false;
     addToDisplay();
 }
 
@@ -188,35 +179,28 @@ const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", clickEquals);
 
 function clickEquals() {
-     if(secondNum === "") {
+    operatorsNormalOpacity();
+    if(secondNum === "" && operatorActive == true) {
         secondNum = firstNum;
     }
     if (operator === "") {
         result = +displayVal;
         return;
     }
-    equalClicked = false;
-    operatorsNormalOpacity();
-    if (resultX2 === true) {
+    if (operatorActive) {
         result = operate(operator, firstNum, firstNum);
-        console.log("rieska");
-    } else {
+    }else {
         result = operate(operator, firstNum, secondNum);
-        console.log("päsl");
     }
-
     // check if dividing with zero and reset everything if that's the case
     if (result != "Infinity") {
         // check if pressing equals before giving secondNum
-        console.log(firstNum, secondNum, result);
         result = +result.toString().substring(0, 9);
         display.textContent = result;
         firstNum = result;
         operatorActive = false;
         equalClicked = true;
         displayVal = "";
-        resultX2 = false;
-        switchOperator = false;
     } else {
         clearScreen();
     }
@@ -242,3 +226,4 @@ function clearScreen() {
     displayVal = "";
     operatorsNormalOpacity();
 };
+
