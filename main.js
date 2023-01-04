@@ -87,7 +87,7 @@ function clickNumber (e) {
     if (displayVal === "0") {
         displayVal = "";
     }
-    if (displayVal.length < 9) {
+    if (displayVal.toString().length < 9) {
         operatorsNormalOpacity();
         displayVal += e.target.textContent;
         if (result != "" && equalClicked == true) {
@@ -95,7 +95,7 @@ function clickNumber (e) {
         } else if (result !== "") {
             secondNum = +displayVal;
             firstNum = result;
-        } else if (firstNum !== "") {
+        } else if (operator != "") {
             secondNum = +displayVal;
         } else {
             firstNum = +displayVal;
@@ -126,6 +126,7 @@ function clickOperator (e) {
         result = operate(operator, firstNum, secondNum);
         // check if dividing with zero and reset everything if that's the case
         if (result != "Infinity") {
+            console.log("määä");
             result = +result.toString().substring(0, 9);
             display.textContent = result;
         } else {
@@ -145,11 +146,12 @@ function addDecimal(e) {
     if (displayVal.includes(".")) {
         return;
     }
+
     displayVal += e.target.textContent;
-    if (displayVal == "." && secondNum == "") {
+    if (displayVal == "." && secondNum === "") {
         displayVal = "0.";
-        secondNum = +displayVal;
     }
+
     operatorActive = false;//
     addToDisplay();
 }
@@ -177,8 +179,14 @@ function addPercent() {
 
 const equals = document.querySelector(".equals-btn");
 equals.addEventListener("click", clickEquals);
+equals.addEventListener("mousedown", targetLessOpacity);
+equals.addEventListener("mouseup", targetNormalOpacity);
 
 function clickEquals() {
+    //to allow clicking equals right at the start
+    if (firstNum === "") {
+        return;
+    }
     operatorsNormalOpacity();
     if(secondNum === "" && operatorActive == true) {
         secondNum = firstNum;
@@ -196,7 +204,7 @@ function clickEquals() {
     if (result != "Infinity") {
         // check if pressing equals before giving secondNum
         result = +result.toString().substring(0, 9);
-        display.textContent = result;
+        display.textContent = +result;
         firstNum = result;
         operatorActive = false;
         equalClicked = true;
