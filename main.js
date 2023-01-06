@@ -157,13 +157,44 @@ function addDecimal(e) {
 }
 
 function addPercent() {
-    operatorsNormalOpacity();
-    displayVal = displayVal / 100;
-    if (+display.textContent === result) {
-        displayVal = result;
+    if (firstNum != "") {
+        operatorsNormalOpacity();
         displayVal = displayVal / 100;
+        if (+display.textContent === result) {
+            displayVal = result;
+            displayVal = displayVal / 100;
+            addToDisplay();
+        }
+        if (result != "" && equalClicked == true) {
+            firstNum = +displayVal;
+        } else if (result !== "") {
+            secondNum = +displayVal;
+            firstNum = result;
+        } else if (operator !== "") {
+            secondNum = +displayVal;
+        } else {
+            firstNum = +displayVal;
+        }
         addToDisplay();
     }
+}
+
+const plusMinus = document.querySelector(".plus-minus-btn");
+plusMinus.addEventListener("click", addPlusMinus);
+plusMinus.addEventListener("mousedown", targetLessOpacity);
+plusMinus.addEventListener("mouseup", targetNormalOpacity);
+
+function addPlusMinus() {
+    if (displayVal === "") {
+        return;
+    }
+    if (displayVal.toString().includes("-")) {
+        displayVal = displayVal.substring(1);
+        console.log("moi");
+    } else {
+        displayVal = "-" + displayVal;
+    }
+
     if (result != "" && equalClicked == true) {
         firstNum = +displayVal;
     } else if (result !== "") {
@@ -216,6 +247,8 @@ function clickEquals() {
 
 const clear = document.querySelector(".clear-btn");
 clear.addEventListener("click", clearScreen);
+clear.addEventListener("mousedown", targetLessOpacity);
+clear.addEventListener("mouseup", targetNormalOpacity);
 
 //Function to clear the display
 function clearScreen() {
@@ -234,4 +267,3 @@ function clearScreen() {
     displayVal = "";
     operatorsNormalOpacity();
 };
-

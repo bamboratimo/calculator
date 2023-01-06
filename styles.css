@@ -22,6 +22,7 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 6%;
+    padding-bottom: 2rem;
 }
 
 .display {
