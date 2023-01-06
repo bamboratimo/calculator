@@ -64,7 +64,6 @@ display.textContent = 0;
 numbers.forEach(num => {
     num.addEventListener("click", clickNumber);
 
-    // make a number color change when pressing down
     num.addEventListener("mousedown", targetLessOpacity);
     num.addEventListener("mouseup", targetNormalOpacity);
 });
@@ -83,6 +82,20 @@ function addToDisplay() {
     display.textContent = displayVal;
 }
 
+function displayValToNums() {
+    if (result != "" && equalClicked == true) {
+        firstNum = +displayVal;
+    } else if (result !== "") {
+        secondNum = +displayVal;
+        firstNum = result;
+    } else if (operator != "") {
+        secondNum = +displayVal;
+    } else {
+        firstNum = +displayVal;
+    }
+}
+
+
 function clickNumber (e) {
     if (displayVal === "0") {
         displayVal = "";
@@ -90,16 +103,7 @@ function clickNumber (e) {
     if (displayVal.toString().length < 9) {
         operatorsNormalOpacity();
         displayVal += e.target.textContent;
-        if (result != "" && equalClicked == true) {
-            firstNum = +displayVal;
-        } else if (result !== "") {
-            secondNum = +displayVal;
-            firstNum = result;
-        } else if (operator != "") {
-            secondNum = +displayVal;
-        } else {
-            firstNum = +displayVal;
-        }
+        displayValToNums();
         operatorActive = false;
         addToDisplay();
     }
@@ -117,7 +121,7 @@ function clickOperator (e) {
         displayVal = "";
         result = "";
     }
-    if (operatorActive){
+    if (operatorActive) {
         operator = e.target.textContent;
         targetLessOpacity(e);
         return;
@@ -165,16 +169,7 @@ function addPercent() {
             displayVal = displayVal / 100;
             addToDisplay();
         }
-        if (result != "" && equalClicked == true) {
-            firstNum = +displayVal;
-        } else if (result !== "") {
-            secondNum = +displayVal;
-            firstNum = result;
-        } else if (operator !== "") {
-            secondNum = +displayVal;
-        } else {
-            firstNum = +displayVal;
-        }
+        displayValToNums();
         addToDisplay();
     }
 }
@@ -185,26 +180,31 @@ plusMinus.addEventListener("mousedown", targetLessOpacity);
 plusMinus.addEventListener("mouseup", targetNormalOpacity);
 
 function addPlusMinus() {
-    if (displayVal === "") {
+    if (operatorActive === true) {
+        display.textContent = "-0"
+        displayVal = "-";
         return;
     }
+
+    if (display.textContent === "0") {
+        displayVal = "-";
+        display.textContent = "-0";
+        console.log(displayVal);
+        return;
+    } else if (display.textContent === "-0") {
+        displayVal = "";
+        display.textContent = "0";
+        console.log("kakka");
+        return;
+    }
+
+
     if (displayVal.toString().includes("-")) {
         displayVal = displayVal.substring(1);
-        console.log("moi");
     } else {
         displayVal = "-" + displayVal;
     }
-
-    if (result != "" && equalClicked == true) {
-        firstNum = +displayVal;
-    } else if (result !== "") {
-        secondNum = +displayVal;
-        firstNum = result;
-    } else if (operator !== "") {
-        secondNum = +displayVal;
-    } else {
-        firstNum = +displayVal;
-    }
+    displayValToNums()
     addToDisplay();
 }
 
