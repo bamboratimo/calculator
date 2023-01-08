@@ -180,6 +180,20 @@ plusMinus.addEventListener("mousedown", targetLessOpacity);
 plusMinus.addEventListener("mouseup", targetNormalOpacity);
 
 function addPlusMinus() {
+    //change minus or not after pressing equals
+    if (equalClicked === true) {
+        if (firstNum.toString().includes("-")) {
+            firstNum = firstNum.toString().substring(1);
+            console.log("eka");
+        } else {
+            firstNum = "-" + firstNum;
+            console.log("toka");
+        }
+        firstNum = +firstNum;
+        display.textContent = firstNum;
+        return;
+    }
+
     if (operatorActive === true) {
         display.textContent = "-0"
         displayVal = "-";
