@@ -11,6 +11,7 @@ body {
     align-items: center;
     font-family: sans-serif;
     background-color: #eaeaea;
+    background-color: #444;
 }
 
 .calculator {
@@ -49,7 +50,7 @@ body {
 .digit {
     width: 80px;
     height: 80px;
-    background-color: grey;
+    background-color: dimgrey;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,10 +68,6 @@ body {
     background-color: orange;
 }
 
-.clear-btn, .divide-btn, .zero, .equals-btn {
-    width: 80px;
-}
-
 .empty {
     width: 80px;
 }
@@ -78,3 +75,8 @@ body {
 button {
     border: none;
 }
+
+.clear-btn, .plus-minus-btn, .percent-btn {
+    background-color: lightgrey;
+    color: black;
+} 

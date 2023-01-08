@@ -126,7 +126,7 @@ function clickOperator (e) {
         targetLessOpacity(e);
         return;
     }
-    if (equalClicked == false && secondNum !== "") {
+    if (equalClicked === false && secondNum !== "") {
         result = operate(operator, firstNum, secondNum);
         // check if dividing with zero and reset everything if that's the case
         if (result != "Infinity") {
@@ -152,7 +152,7 @@ function addDecimal(e) {
     }
 
     displayVal += e.target.textContent;
-    if (displayVal == "." && secondNum === "") {
+    if ((displayVal == "." && secondNum === "") || equalClicked === true) {
         displayVal = "0.";
     }
 
@@ -161,16 +161,27 @@ function addDecimal(e) {
 }
 
 function addPercent() {
-    if (firstNum != "") {
-        operatorsNormalOpacity();
-        displayVal = displayVal / 100;
-        if (+display.textContent === result) {
-            displayVal = result;
+    if (display.textContent !== "0") {
+        if (display.textContent = firstNum && displayVal === "") {
+            displayVal = firstNum / 100;
+            firstNum = firstNum / 100;
+            firstNum = +firstNum.toString().substring(0, 9);
+            display.textContent = displayVal;
+            displayVal = "";
+            result = "";
+            return;
+        }
+        if (firstNum != "") {
+            operatorsNormalOpacity();
             displayVal = displayVal / 100;
+            if (+display.textContent === result) {
+                displayVal = result;
+                displayVal = displayVal / 100;
+                addToDisplay();
+            }
+            displayValToNums();
             addToDisplay();
         }
-        displayValToNums();
-        addToDisplay();
     }
 }
 
@@ -181,37 +192,37 @@ plusMinus.addEventListener("mouseup", targetNormalOpacity);
 
 function addPlusMinus() {
     //change minus or not after pressing equals
+    operatorsNormalOpacity();
     if (equalClicked === true) {
         if (firstNum.toString().includes("-")) {
             firstNum = firstNum.toString().substring(1);
-            console.log("eka");
         } else {
             firstNum = "-" + firstNum;
-            console.log("toka");
         }
         firstNum = +firstNum;
         display.textContent = firstNum;
         return;
     }
 
-    if (operatorActive === true) {
+    if ((operatorActive === true && !display.textContent.includes("-")) || display.textContent === "0") {
         display.textContent = "-0"
         displayVal = "-";
         return;
+    } else if ((operatorActive === true && display.textContent.includes("-")) || display.textContent === "-0") {
+        display.textContent = "0"
+        displayVal = "";
+        return;
     }
 
-    if (display.textContent === "0") {
+    /*if (display.textContent === "0") {
         displayVal = "-";
         display.textContent = "-0";
-        console.log(displayVal);
         return;
     } else if (display.textContent === "-0") {
         displayVal = "";
         display.textContent = "0";
-        console.log("kakka");
         return;
-    }
-
+    }*/
 
     if (displayVal.toString().includes("-")) {
         displayVal = displayVal.substring(1);
@@ -228,11 +239,11 @@ equals.addEventListener("mousedown", targetLessOpacity);
 equals.addEventListener("mouseup", targetNormalOpacity);
 
 function clickEquals() {
+    operatorsNormalOpacity();
     //to allow clicking equals right at the start
     if (firstNum === "") {
         return;
     }
-    operatorsNormalOpacity();
     if(secondNum === "" && operatorActive == true) {
         secondNum = firstNum;
     }
