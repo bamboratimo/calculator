@@ -170,12 +170,12 @@ function addPercent() {
     }
      if (display.textContent !== "0") {
         if (display.textContent == firstNum && displayVal === "") {
-            displayVal = firstNum / 100;
             firstNum = firstNum / 100;
             firstNum = +firstNum.toString().substring(0, 9);
             display.textContent = firstNum;
             displayVal = "";
-            result = "";
+            operator = "";
+            addToDisplay;
             return;
         } 
         if (firstNum != "") {
@@ -220,6 +220,29 @@ function addPlusMinus() {
     }
     displayValToNums()
     addToDisplay();
+}
+
+const backspace = document.querySelector(".backspace-btn");
+backspace.addEventListener("mousedown", targetLessOpacity);
+backspace.addEventListener("mouseup", targetNormalOpacity);
+backspace.addEventListener("click", useBackspace);
+
+function useBackspace() {
+    if((equalClicked === true && displayVal == "") || display.textContent === "0") {
+        return;
+    }
+    if (displayVal.length === 1 || displayVal === "-0") {
+        displayVal = "";
+        display.textContent = "0";
+        return;
+    } else if (displayVal.length === 2 && displayVal.includes("-")) {
+        displayVal = "-";
+        display.textContent = "-0";
+        return;
+    }
+        displayVal = displayVal.slice(0, -1);
+        displayValToNums();
+        addToDisplay();
 }
 
 const equals = document.querySelector(".equals-btn");
