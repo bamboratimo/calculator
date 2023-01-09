@@ -76,7 +76,12 @@ button {
     border: none;
 }
 
-.clear-btn, .plus-minus-btn, .percent-btn {
+.clear-btn, .plus-minus-btn, .percent-btn, .backspace-btn {
     background-color: lightgrey;
     color: black;
+}
+
+.clear-btn:hover, .plus-minus-btn:hover, .percent-btn:hover, .backspace-btn:hover {
+    background-color: lightgrey;
+    color: white;
 } 

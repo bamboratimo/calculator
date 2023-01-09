@@ -83,6 +83,7 @@ function addToDisplay() {
 }
 
 function displayValToNums() {
+    displayVal = displayVal.toString().substring(0, 9);
     if (result != "" && equalClicked == true) {
         firstNum = +displayVal;
     } else if (result !== "") {
@@ -94,7 +95,6 @@ function displayValToNums() {
         firstNum = +displayVal;
     }
 }
-
 
 function clickNumber (e) {
     if (displayVal === "0") {
@@ -130,7 +130,6 @@ function clickOperator (e) {
         result = operate(operator, firstNum, secondNum);
         // check if dividing with zero and reset everything if that's the case
         if (result != "Infinity") {
-            console.log("määä");
             result = +result.toString().substring(0, 9);
             display.textContent = result;
         } else {
@@ -156,29 +155,31 @@ function addDecimal(e) {
         displayVal = "0.";
     }
 
-    operatorActive = false;//
+    operatorActive = false;
     addToDisplay();
 }
 
 function addPercent() {
-    if (display.textContent !== "0") {
-        if (display.textContent = firstNum && displayVal === "") {
+    operatorsNormalOpacity();
+    if (operatorActive === true) {
+        displayVal = display.textContent / 100;
+        displayValToNums();
+        addToDisplay();
+        operatorActive = false;
+        return;
+    }
+     if (display.textContent !== "0") {
+        if (display.textContent == firstNum && displayVal === "") {
             displayVal = firstNum / 100;
             firstNum = firstNum / 100;
             firstNum = +firstNum.toString().substring(0, 9);
-            display.textContent = displayVal;
+            display.textContent = firstNum;
             displayVal = "";
             result = "";
             return;
-        }
+        } 
         if (firstNum != "") {
-            operatorsNormalOpacity();
             displayVal = displayVal / 100;
-            if (+display.textContent === result) {
-                displayVal = result;
-                displayVal = displayVal / 100;
-                addToDisplay();
-            }
             displayValToNums();
             addToDisplay();
         }
@@ -203,7 +204,6 @@ function addPlusMinus() {
         display.textContent = firstNum;
         return;
     }
-
     if ((operatorActive === true && !display.textContent.includes("-")) || display.textContent === "0") {
         display.textContent = "-0"
         displayVal = "-";
@@ -213,17 +213,6 @@ function addPlusMinus() {
         displayVal = "";
         return;
     }
-
-    /*if (display.textContent === "0") {
-        displayVal = "-";
-        display.textContent = "-0";
-        return;
-    } else if (display.textContent === "-0") {
-        displayVal = "";
-        display.textContent = "0";
-        return;
-    }*/
-
     if (displayVal.toString().includes("-")) {
         displayVal = displayVal.substring(1);
     } else {
