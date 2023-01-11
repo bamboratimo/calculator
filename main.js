@@ -62,7 +62,9 @@ display.textContent = 0;
 
 // activate eventListener for numbers
 numbers.forEach(num => {
-    num.addEventListener("click", clickNumber);
+    num.addEventListener("click", () => {
+        clickNumber(num.textContent);
+    });
 
     num.addEventListener("mousedown", targetLessOpacity);
     num.addEventListener("mouseup", targetNormalOpacity);
@@ -78,12 +80,12 @@ percent.addEventListener("click", addPercent);
 percent.addEventListener("mousedown", targetLessOpacity);
 percent.addEventListener("mouseup", targetNormalOpacity);
 
+
 function addToDisplay() {
-    display.textContent = displayVal;
+    display.textContent = displayVal.toString().substring(0, 9);
 }
 
 function displayValToNums() {
-    displayVal = displayVal.toString().substring(0, 9);
     if (result != "" && equalClicked == true) {
         firstNum = +displayVal;
     } else if (result !== "") {
@@ -93,16 +95,18 @@ function displayValToNums() {
         secondNum = +displayVal;
     } else {
         firstNum = +displayVal;
+        console.log(typeof displayVal);
     }
 }
 
-function clickNumber (e) {
+function clickNumber (num) {
     if (displayVal === "0") {
         displayVal = "";
     }
     if (displayVal.toString().length < 9) {
         operatorsNormalOpacity();
-        displayVal += e.target.textContent;
+        displayVal += num;
+        //displayVal += e.target.textContent;
         displayValToNums();
         operatorActive = false;
         addToDisplay();
@@ -111,10 +115,13 @@ function clickNumber (e) {
 
 //add eventListeners for operator buttons
 operators.forEach(oper => {
-    oper.addEventListener("click", clickOperator);
+    oper.addEventListener("click", () => {
+        clickOperator(oper.textContent);
+        oper.style.opacity = "0.3";
+    });
 });
 
-function clickOperator (e) {
+function clickOperator (oper) {
     operatorsNormalOpacity();
     if (equalClicked === true) {
         secondNum = firstNum;
@@ -122,8 +129,9 @@ function clickOperator (e) {
         result = "";
     }
     if (operatorActive) {
-        operator = e.target.textContent;
-        targetLessOpacity(e);
+        //operator = e.target.textContent;
+        operator = oper;
+        //targetLessOpacity(e);
         return;
     }
     if (equalClicked === false && secondNum !== "") {
@@ -138,19 +146,21 @@ function clickOperator (e) {
         }
     }
     equalClicked = false;
-    operator = e.target.textContent.toString();
+    //operator = e.target.textContent.toString();
+    operator = oper;
     operatorActive = true;
-    targetLessOpacity(e);
+    //targetLessOpacity(e);
     displayVal = "";
 };
 
-function addDecimal(e) {
+function addDecimal() {
+    console.log("moi");
     operatorsNormalOpacity();
     if (displayVal.includes(".")) {
         return;
     }
 
-    displayVal += e.target.textContent;
+    displayVal += ".";
     if ((displayVal == "." && secondNum === "") || equalClicked === true) {
         displayVal = "0.";
     }
@@ -169,13 +179,12 @@ function addPercent() {
         return;
     }
      if (display.textContent !== "0") {
-        if (display.textContent == firstNum && displayVal === "") {
+        console.log(display.textContent, firstNum);
+        if (display.textContent == firstNum.toString().substring(0, 9) && displayVal === "") {
             firstNum = firstNum / 100;
-            firstNum = +firstNum.toString().substring(0, 9);
-            display.textContent = firstNum;
+            display.textContent = firstNum.toString().substring(0, 9);
             displayVal = "";
             operator = "";
-            addToDisplay;
             return;
         } 
         if (firstNum != "") {
@@ -304,3 +313,81 @@ function clearScreen() {
     displayVal = "";
     operatorsNormalOpacity();
 };
+
+//key event
+window.addEventListener("keydown", (e) => {
+    console.log(e.key);
+    switch (e.key) {
+        case "Enter":
+            clickEquals();
+            break;
+
+        case ".":
+            addDecimal();
+            break;
+
+        case "Backspace":
+            useBackspace();
+            break;
+
+        case "%":
+            addPercent();
+            break;
+
+        case "1":
+            clickNumber("1");
+            break;
+
+        case "2":
+            clickNumber("2");
+            break;
+
+        case "3":
+            clickNumber("3");
+            break;
+
+        case "4":
+            clickNumber("4");
+            break;
+
+        case "5":
+            clickNumber("5");
+            break;
+
+        case "6":
+            clickNumber("6");
+            break;
+
+        case "7":
+            clickNumber("7");
+            break;
+
+        case "8":
+            clickNumber("8");
+            break;
+
+        case "9":
+            clickNumber("9");
+            break;
+
+        case "0":
+            clickNumber("0");
+            break;
+
+        case "+":
+            clickOperator("+");
+            break;
+
+        case "-":
+            clickOperator("-");
+            break;
+
+        case "/":
+            clickOperator("/");
+            break;
+
+        case "*":
+            clickOperator("*");
+            break;
+        }
+});
