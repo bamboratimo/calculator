@@ -95,7 +95,6 @@ function displayValToNums() {
         secondNum = +displayVal;
     } else {
         firstNum = +displayVal;
-        console.log(typeof displayVal);
     }
 }
 
@@ -129,9 +128,8 @@ function clickOperator (oper) {
         result = "";
     }
     if (operatorActive) {
-        //operator = e.target.textContent;
         operator = oper;
-        //targetLessOpacity(e);
+        console.log(operator);
         return;
     }
     if (equalClicked === false && secondNum !== "") {
@@ -146,7 +144,6 @@ function clickOperator (oper) {
         }
     }
     equalClicked = false;
-    //operator = e.target.textContent.toString();
     operator = oper;
     operatorActive = true;
     //targetLessOpacity(e);
@@ -154,7 +151,6 @@ function clickOperator (oper) {
 };
 
 function addDecimal() {
-    console.log("moi");
     operatorsNormalOpacity();
     if (displayVal.includes(".")) {
         return;
@@ -179,7 +175,6 @@ function addPercent() {
         return;
     }
      if (display.textContent !== "0") {
-        console.log(display.textContent, firstNum);
         if (display.textContent == firstNum.toString().substring(0, 9) && displayVal === "") {
             firstNum = firstNum / 100;
             display.textContent = firstNum.toString().substring(0, 9);
@@ -201,6 +196,11 @@ plusMinus.addEventListener("mousedown", targetLessOpacity);
 plusMinus.addEventListener("mouseup", targetNormalOpacity);
 
 function addPlusMinus() {
+    if (operatorActive) {
+        display.textContent = "-0";
+        displayVal = "-";
+        return;
+    }
     //change minus or not after pressing equals
     operatorsNormalOpacity();
     if (equalClicked === true) {
@@ -211,15 +211,6 @@ function addPlusMinus() {
         }
         firstNum = +firstNum;
         display.textContent = firstNum;
-        return;
-    }
-    if ((operatorActive === true && !display.textContent.includes("-")) || display.textContent === "0") {
-        display.textContent = "-0"
-        displayVal = "-";
-        return;
-    } else if ((operatorActive === true && display.textContent.includes("-")) || display.textContent === "-0") {
-        display.textContent = "0"
-        displayVal = "";
         return;
     }
     if (displayVal.toString().includes("-")) {
@@ -314,9 +305,8 @@ function clearScreen() {
     operatorsNormalOpacity();
 };
 
-//key event
+//keyboard support
 window.addEventListener("keydown", (e) => {
-    console.log(e.key);
     switch (e.key) {
         case "Enter":
             clickEquals();
@@ -328,6 +318,10 @@ window.addEventListener("keydown", (e) => {
 
         case "Backspace":
             useBackspace();
+            break;
+
+        case "c":
+            clearScreen();
             break;
 
         case "%":
