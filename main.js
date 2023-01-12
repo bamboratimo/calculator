@@ -201,6 +201,7 @@ function addPlusMinus() {
         displayVal = "-";
         return;
     }
+
     //change minus or not after pressing equals
     operatorsNormalOpacity();
     if (equalClicked === true) {
@@ -211,6 +212,15 @@ function addPlusMinus() {
         }
         firstNum = +firstNum;
         display.textContent = firstNum;
+        return;
+    }
+    if  (display.textContent === "0") {
+        display.textContent = "-0"
+        displayVal = "-";
+        return;
+    } else if (display.textContent === "-0") {
+        display.textContent = "0"
+        displayVal = "";
         return;
     }
     if (displayVal.toString().includes("-")) {
