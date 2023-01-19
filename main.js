@@ -105,7 +105,6 @@ function clickNumber (num) {
     if (displayVal.toString().length < 9) {
         operatorsNormalOpacity();
         displayVal += num;
-        //displayVal += e.target.textContent;
         displayValToNums();
         operatorActive = false;
         addToDisplay();
@@ -139,6 +138,7 @@ function clickOperator (oper) {
         if (result != "Infinity") {
             result = +result.toString().substring(0, 9);
             display.textContent = result;
+            secondNum = result;//////////////////////////////////
         } else {
             clearScreen();
             return;
@@ -147,7 +147,6 @@ function clickOperator (oper) {
     equalClicked = false;
     operator = oper;
     operatorActive = true;
-    //targetLessOpacity(e);
     displayVal = "";
 };
 
@@ -275,9 +274,12 @@ function clickEquals() {
         return;
     }
     if (operatorActive) {
-        result = operate(operator, firstNum, firstNum);
+        console.log("moi");
+        result = operate(operator, +display.textContent, +display.textContent);//
+        //result = operate(operator, firstNum, firstNum);
     }else {
         result = operate(operator, firstNum, secondNum);
+        console.log(firstNum, secondNum, result);
     }
     // check if dividing with zero and reset everything if that's the case
     if (result != "Infinity") {
@@ -288,7 +290,6 @@ function clickEquals() {
         operatorActive = false;
         equalClicked = true;
         displayVal = "";
-        console.log(firstNum, secondNum, result, operator, displayVal, display.textContent);//
     } else {
         clearScreen();
     }
