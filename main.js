@@ -109,6 +109,7 @@ function clickNumber (num) {
         displayValToNums();
         operatorActive = false;
         addToDisplay();
+        document.activeElement.blur();
     }
 }
 
@@ -287,6 +288,7 @@ function clickEquals() {
         operatorActive = false;
         equalClicked = true;
         displayVal = "";
+        console.log(firstNum, secondNum, result, operator, displayVal, display.textContent);//
     } else {
         clearScreen();
     }
